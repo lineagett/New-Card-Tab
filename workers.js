@@ -2398,7 +2398,7 @@ const HTML_CONTENT = `
                 const name = card.querySelector('.card-title').textContent;
                 const iconElement = card.querySelector('.card-icon');
                 const src = iconElement ? iconElement.getAttribute('src') : '';
-                const icon = src.startsWith('imgApi') ? '' : src;
+                const icon = src.startsWith(imgApi) ? '' : src;
                 const isPrivate = card.dataset.isPrivate === 'true';
                 card.dataset.category = category;
                 const link = { name, url, tips, icon, category, isPrivate };
