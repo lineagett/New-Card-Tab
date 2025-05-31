@@ -100,7 +100,7 @@ const HTML_CONTENT = `
         }
         
         /* 中心内容样式 */
-        .center-content {
+        .search-content {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -131,10 +131,6 @@ const HTML_CONTENT = `
             transition: background 0.3s, transform 0.3s; 
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
         }
-        
-        .admin-btn:hover {
-            transform: translateY(-2px); 
-        }
 
         body.dark-theme .admin-btn {
             background-color: #5d7fb9;
@@ -142,10 +138,6 @@ const HTML_CONTENT = `
 
         .admin-a {
             z-index:1000;
-        }
-
-        .admin-a:hover {
-            transform: translateY(-2px);
         }
 
         .admin-a svg {
@@ -160,6 +152,7 @@ const HTML_CONTENT = `
         .edit-card-mode-btn { order: 2; }
         .add-category-btn { order: 3; }
         .edit-category-mode-btn { order: 4; }
+		.export-data-btn { order: 5; }
         
         /* 设置面板样式 */
         .setting-panel {
@@ -167,7 +160,7 @@ const HTML_CONTENT = `
             flex-direction: column;
             position: fixed;
             right: 20px;
-            top: 50%;
+            top: 40%;
             transform: translateY(-50%);
             align-items: center;
             gap: 15px;
@@ -277,9 +270,20 @@ const HTML_CONTENT = `
         }
 
         body.dark-theme .search-bar input {
-            background-color: #252830;
+            background-color: #252830 !important;
             color: #e3e3e3;
         }
+
+		body.dark-theme .search-bar input:-webkit-autofill {
+			-webkit-box-shadow: 0 0 0 1000px #252830 inset !important;
+			-webkit-text-fill-color: #e3e3e3 !important;
+			transition: background-color 5000s ease-in-out 0s !important;
+		}
+
+		body.dark-theme .search-bar input:-moz-autofill {
+			box-shadow: 0 0 0px 1000px #252830 inset !important;
+			-moz-text-fill-color: #e3e3e3 !important;
+		}
 
         body.dark-theme .search-bar button {
             background-color: #5d7fb9;
@@ -297,9 +301,22 @@ const HTML_CONTENT = `
             border: none;
             padding: 10px 15px;
             font-size: 14px;
-            background-color: #fff;
+            background-color: #fff !important;
             outline: none;
         }
+
+		/* 针对 Chrome 和其他基于 Webkit 的浏览器 */
+		.search-bar input:-webkit-autofill {
+			-webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+			-webkit-text-fill-color: #000 !important;
+			transition: background-color 5000s ease-in-out 0s !important;
+		}
+
+		/* Firefox */
+		.search-bar input:-moz-autofill {
+			box-shadow: 0 0 0px 1000px #fff inset !important;
+			-moz-text-fill-color: #000 !important;
+		}
 
         .search-bar button {
             border: none;
@@ -310,11 +327,14 @@ const HTML_CONTENT = `
             transition: background-color 0.3s;
         }
 
-        .search-bar button:hover {
-            background-color: #35a674;
-        }
+		#clear-search-button {
+			display: none; 
+			background-color: #fff !important;
+			color: #555;
+		}
+
         
-        /* 分类按钮容器样式 - 移至固定元素区域内 */
+        /* 分类按钮容器样式 */
         .category-buttons-container {
             display: flex;
             justify-content: center; 
@@ -950,6 +970,10 @@ const HTML_CONTENT = `
           }
 
         @media (hover: hover) and (pointer: fine) {
+			.admin-btn:hover,
+			.admin-a:hover {
+				transform: translateY(-2px); 
+			}
             .category-button:hover {
                 background-color: #43b883;
                 color: white;
@@ -992,6 +1016,12 @@ const HTML_CONTENT = `
                 pointer-events: none;
                 opacity: 0;
                 transition: opacity 0.3s;
+				 /* ✅ 新增关键样式 */
+				display: flex;
+				align-items: center;
+				white-space: nowrap;
+				height: auto; /* 允许自适应高度 */
+				pointer-events: none;
             }
 
             .has-tooltip::before {
@@ -1111,21 +1141,24 @@ const HTML_CONTENT = `
                 <a target="_blank" class="admin-a has-tooltip tooltip-left" id="original-author" data-tooltip="原作者Github,喜欢请给他点⭐" href="https://github.com/hmhm2022/Card-Tab"><svg stroke-width="0" viewBox="0 0 16 16" class="text-xl svg-icon" height="3em" width="3em" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a>
             </div>
         </div>
-        <div class="center-content">
+        <div class="search-content">
             <!-- 搜索栏 -->
             <div class="search-container">
                 <div class="search-bar">
                     <select id="search-engine-select">
+						<option value="site">本站</option>
                         <option value="baidu">百度</option>
                         <option value="bing">必应</option>
                         <option value="google">谷歌</option>
                     </select>
                     <input type="text" id="search-input" placeholder="">
+					<button id="clear-search-button" class="has-tooltip tooltip-left" data-tooltip="清除搜索结果">❌</button>
                     <button id="search-button">🔍</button>
+					
                 </div>
             </div>
-            <div id="category-buttons-container" class="category-buttons-container"></div>
         </div>
+		<div id="category-buttons-container" class="category-buttons-container"></div>
         
     </div>
     <div class="content">
@@ -1159,6 +1192,10 @@ const HTML_CONTENT = `
                     <path d="M24 21v3m0 8v3m4.8-12-2.1 2.1M20.8 31l-2.1 2.1M19 23l2.1 2.1M27 31l2.1 2.1M17 28h3M28 28h3" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
+
+			<button class="round-btn export-data-btn has-tooltip tooltip-left" onclick="exportData()" data-tooltip="导出数据">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>
+			</button>
         </div>
 
         <!-- 分类和卡片容器 -->
@@ -1280,7 +1317,7 @@ const HTML_CONTENT = `
         google: "https://www.google.com/search?q="
     };
     
-    let currentEngine = "baidu";
+    let currentEngine = "site";
     
     // 日志记录函数
     function logAction(action, details) {
@@ -1305,10 +1342,20 @@ const HTML_CONTENT = `
     document.getElementById('search-button').addEventListener('click', () => {
         const query = document.getElementById('search-input').value;
         if (query) {
-            logAction('执行搜索', { engine: currentEngine, query });
-            window.open(searchEngines[currentEngine] + encodeURIComponent(query), '_blank');
+            if (currentEngine === 'site') {
+				logAction('执行本站搜索', { query });
+				searchLinks(query); // 本站搜索
+			} else {
+				logAction('跳转外部搜索', { engine: currentEngine, query });
+				window.open(searchEngines[currentEngine] + encodeURIComponent(query), '_blank');
+			}
         }
     });
+
+	document.getElementById('clear-search-button').addEventListener('click', () => {
+		document.getElementById('search-input').value = '';
+		loadSections(); 
+	});
 
     // 搜索输入框回车事件
     document.getElementById('search-input').addEventListener('keypress', (e) => {
@@ -1319,16 +1366,31 @@ const HTML_CONTENT = `
     
     // 初始化搜索引擎
     setActiveEngine(currentEngine);
+
+	function setSearchDisabledState(disabled) {
+		const controls = document.querySelectorAll(
+			'#search-input, #search-button, #clear-search-button'
+		);
+
+		controls.forEach(control => {
+			if (disabled) {
+				control.style.opacity = '0.6';
+				control.style.cursor = 'not-allowed';
+				control.disabled = true;
+			} else {
+				control.style.opacity = '';
+				control.style.cursor = '';
+				control.disabled = false;
+			}
+		});
+	}
     
     // 全局变量
-    let publicLinks = [];
-    let privateLinks = [];
     let isAdmin = false;
     let isLoggedIn = false;
     let editCardMode = false;
     let isEditCategoryMode = false;
     let isDarkTheme = false;
-    let links = [];
     const categories = {};
     
     // 添加新分类
@@ -1336,7 +1398,6 @@ const HTML_CONTENT = `
 		if (!await validateToken()) {
             return; 
         }
-        // const categoryName = prompt('请输入新分类名称:');
         const categoryName = await showCategoryDialog('请输入新分类名称');
         if (categoryName && !categories[categoryName]) {
             categories[categoryName] = [];
@@ -1345,9 +1406,8 @@ const HTML_CONTENT = `
             saveLinks().catch(err => {
                 customAlert('保存失败：' + err.message);
             });
-            logAction('添加分类', { categoryName, currentLinkCount: links.length });
+            logAction('添加分类', { categoryName, currentLinkCount: getAllLinks().length });
         } else if (categories[categoryName]) {
-            // alert('该分类已存在');
             customAlert('该分类已存在');
             logAction('添加分类失败', { categoryName, reason: '分类已存在' });
         }
@@ -1369,20 +1429,10 @@ const HTML_CONTENT = `
     
         // 1. 重命名分类对象
         categories[newName] = categories[oldName];
+        categories[newName].forEach(item => {
+            item.category = newName; 
+        });
         delete categories[oldName];
-    
-        // 2. 更新所有链接的 category 字段
-        [...publicLinks, ...privateLinks].forEach(link => {
-            if (link.category === oldName) {
-                link.category = newName;
-            }
-        });
-    
-        links.forEach(link => {
-            if (link.category === oldName) {
-                link.category = newName;
-            }
-        });
     
         // 3. 保存并刷新
         renderCategories();
@@ -1407,9 +1457,6 @@ const HTML_CONTENT = `
         
         if (confirmed) {
             delete categories[category];
-            links = links.filter(link => link.category !== category);
-            publicLinks = publicLinks.filter(link => link.category !== category);
-            privateLinks = privateLinks.filter(link => link.category !== category);
             updateCategorySelect();
             renderCategories();
             renderCategoryButtons();
@@ -1454,109 +1501,187 @@ const HTML_CONTENT = `
         logAction('移动分类', { categoryName, direction });
     }
     
+	function getFilteredCategoriesByKeyword(query) {
+		const lowerQuery = query.toLowerCase();
+		const result = {};
 
-    // 渲染分类(不重新加载链接)
-    function renderCategories() {
-        const container = document.getElementById('sections-container');
-        container.innerHTML = '';
-    
-        Object.keys(categories).forEach(category => {
-            const section = document.createElement('div');
-            section.className = 'section';
-    
-            const titleContainer = document.createElement('div');
-            titleContainer.className = 'section-title-container';
-    
-            const title = document.createElement('div');
-            title.className = 'section-title';
-            title.textContent = category;
-    
-            titleContainer.appendChild(title);
-    
-            if (isAdmin) {
-                const editBtn = document.createElement('button');
-                editBtn.textContent = '编辑名称';
-                editBtn.className = 'edit-category-btn';
-                editBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-                editBtn.onclick = () => editCategoryName(category);
-                titleContainer.appendChild(editBtn);
-                
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = '删除分类';
-                deleteBtn.className = 'delete-category-btn';
-                deleteBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none'; 
-                deleteBtn.onclick = () => deleteCategory(category);
-                titleContainer.appendChild(deleteBtn);
-                
-                const upBtn = document.createElement('button');
-                upBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6l-6 6h4v6h4v-6h4z"/></svg>';
-                upBtn.className = 'move-category-btn';
-                upBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-                upBtn.onclick = () => moveCategory(category, -1);
-                titleContainer.appendChild(upBtn);
-                
-                const downBtn = document.createElement('button');
-                downBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18l6-6h-4v-6h-4v6h-4z"/></svg>';
-                downBtn.className = 'move-category-btn';
-                downBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-                downBtn.onclick = () => moveCategory(category, 1);
-                titleContainer.appendChild(downBtn);
-            }
-    
-            const cardContainer = document.createElement('div');
-            cardContainer.className = 'card-container';
-            cardContainer.id = category;
-    
-            section.appendChild(titleContainer);
-            section.appendChild(cardContainer);
-    
-            container.appendChild(section);
-    
-            const categoryLinks = links.filter(link => link.category === category);
-            categoryLinks.forEach(link => {
-                createCard(link, cardContainer);
-            });
-        });
-    
-        logAction('渲染分类', { categoryCount: Object.keys(categories).length, linkCount: links.length });
-    }  
+		Object.keys(categories).forEach(category => {
+			let privateCount = 0;
+			let linkCount = 0;
+
+			const matchedLinks = categories[category].filter(link => {
+				const nameMatch = link.name && link.name.toLowerCase().includes(lowerQuery);
+				const tipsMatch = link.tips && link.tips.toLowerCase().includes(lowerQuery);
+				const matched = nameMatch || tipsMatch;
+
+				if (matched) {
+					if (link.isPrivate) privateCount++;
+					linkCount++;
+				}
+
+				return matched;
+			});
+
+			if (matchedLinks.length > 0) {
+				result[category] = matchedLinks;
+			}
+		});
+
+		return result;
+	}
+
+    function renderCategorySections({ 
+		filterPrivate = false, 
+		renderButtons = false, 
+		logTag = '渲染分类',
+		searchMode = false,
+		filteredCategories = null 
+	} = {}) {
+		const container = document.getElementById('sections-container');
+		const fragment = document.createDocumentFragment();
+
+		const sourceCategories = searchMode && filteredCategories 
+			? filteredCategories 
+			: categories;
+
+		Object.keys(sourceCategories).forEach(category => {
+			const section = document.createElement('div');
+			section.className = 'section';
+
+			const titleContainer = document.createElement('div');
+			titleContainer.className = 'section-title-container';
+
+			const title = document.createElement('div');
+			title.className = 'section-title';
+			title.textContent = category;
+			titleContainer.appendChild(title);
+
+			if (isAdmin) {
+				const editBtn = document.createElement('button');
+				editBtn.textContent = '编辑名称';
+				editBtn.className = 'edit-category-btn';
+				editBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+				editBtn.onclick = () => editCategoryName(category);
+				titleContainer.appendChild(editBtn);
+
+				const deleteBtn = document.createElement('button');
+				deleteBtn.textContent = '删除分类';
+				deleteBtn.className = 'delete-category-btn';
+				deleteBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+				deleteBtn.onclick = () => deleteCategory(category);
+				titleContainer.appendChild(deleteBtn);
+
+				const upBtn = document.createElement('button');
+				upBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6l-6 6h4v6h4v-6h4z"/></svg>';
+				upBtn.className = 'move-category-btn';
+				upBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+				upBtn.onclick = () => moveCategory(category, -1);
+				titleContainer.appendChild(upBtn);
+
+				const downBtn = document.createElement('button');
+				downBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18l6-6h-4v-6h-4v6h-4z"/></svg>';
+				downBtn.className = 'move-category-btn';
+				downBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+				downBtn.onclick = () => moveCategory(category, 1);
+				titleContainer.appendChild(downBtn);
+			}
+
+			const cardContainer = document.createElement('div');
+			cardContainer.className = 'card-container';
+			cardContainer.id = category;
+
+			section.appendChild(titleContainer);
+			section.appendChild(cardContainer);
+
+			let linksInCategory = sourceCategories[category];
+			let privateCount = 0;
+			let linkCount = 0;
+
+			linksInCategory.forEach(link => {
+				if (link.isPrivate) privateCount++;
+				linkCount++;
+				createCard(link, cardContainer);
+			});
+
+			if (privateCount < linkCount || isLoggedIn) {
+				fragment.appendChild(section);
+			}
+		});
+
+		container.replaceChildren(...fragment.childNodes);
+
+		if (renderButtons) {
+			renderCategoryButtons();
+		}
+
+		logAction(logTag, {
+			isAdmin,
+			categoryCount: Object.keys(sourceCategories).length,
+			linkCount: Object.values(sourceCategories).flat().length
+		});
+	}
+
+	// 渲染分类
+	function renderCategories() {
+		renderCategorySections({
+			renderButtons: false,
+			logTag: '渲染分类'
+		});
+	} 
+
+	function searchLinks(query) {
+		const clearBtn = document.getElementById('clear-search-button');
+		const filteredData = getFilteredCategoriesByKeyword(query);
+
+		if (Object.keys(filteredData).length === 0) {
+			customAlert('没有找到相关站点。');
+			return;
+		}
+		clearBtn.style.display = 'block';
+		renderCategorySections({
+			renderButtons: true,
+			logTag: '搜索结果',
+			searchMode: true,
+			filteredCategories: filteredData
+		});
+	}
     
     // 渲染分类快捷按钮
     function renderCategoryButtons() {
-        const buttonsContainer = document.getElementById('category-buttons-container');
-        buttonsContainer.innerHTML = '';
-    
-        const sectionTitles = document.querySelectorAll('#sections-container .section-title');
-        const displayedCategories = Array.from(sectionTitles).map(title => title.textContent);
-    
-        // 过滤出有可见链接的分类
-        const visibleCategories = displayedCategories.filter(category =>
-            links.some(link => link.category === category && (!link.isPrivate || isLoggedIn))
-        );
-    
-        if (visibleCategories.length === 0) {
-            buttonsContainer.style.display = 'none';
-            return;
-        }
-    
-        visibleCategories.forEach(category => {
-            const button = document.createElement('button');
-            button.className = 'category-button';
-            button.textContent = category;
-            button.dataset.category = category;
-    
-            button.addEventListener('click', () => {
-                scrollToCategory(category);
-            });
-    
-            buttonsContainer.appendChild(button);
-        });
-    
-        buttonsContainer.style.display = 'flex';
-    
-        // 延迟设置初始活跃按钮
-        setTimeout(setActiveCategoryButtonByVisibility, 100);
-    }
+		const buttonsContainer = document.getElementById('category-buttons-container');
+		const fragment = document.createDocumentFragment();
+
+		const sectionTitles = document.querySelectorAll('#sections-container .section-title');
+		const displayedCategories = Array.from(sectionTitles).map(title => title.textContent);
+
+		const visibleCategories = displayedCategories.filter(category =>
+			categories[category].some(link => !link.isPrivate || isLoggedIn)
+		);
+
+		if (visibleCategories.length === 0) {
+			buttonsContainer.style.display = 'none';
+			return;
+		}
+
+		visibleCategories.forEach(category => {
+			const button = document.createElement('button');
+			button.className = 'category-button';
+			button.textContent = category;
+			button.dataset.category = category;
+
+			button.addEventListener('click', () => {
+				scrollToCategory(category);
+			});
+
+			fragment.appendChild(button);
+		});
+
+		buttonsContainer.replaceChildren(...fragment.childNodes);
+		buttonsContainer.style.display = 'flex';
+
+		// 延迟设置活跃按钮
+		setTimeout(setActiveCategoryButtonByVisibility, 100);
+	}
     
 
     // 根据可见性设置活跃的分类按钮
@@ -1657,6 +1782,16 @@ const HTML_CONTENT = `
             logAction('滚动到分类', { category });
         }
     }
+
+	function getAllLinks() {
+		return Object.values(categories).flat(); 
+	}
+
+	function getPublicLinks() {
+		return Object.values(categories)
+			.flat()
+			.filter(item => !item.isPrivate);
+	}
     
     // 读取链接数据
     async function loadLinks() {
@@ -1683,22 +1818,15 @@ const HTML_CONTENT = `
             
             
             const data = await response.json();
-            console.log('Received data:', data); 
             
             if (data.categories) {
                 Object.assign(categories, data.categories);
             }
-            
-            publicLinks = data.links ? data.links.filter(link => !link.isPrivate) : [];
-            privateLinks = data.links ? data.links.filter(link => link.isPrivate) : [];
-            links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
 
             loadSections();
             updateCategorySelect();
             updateUIState();
             logAction('读取链接', { 
-                publicCount: publicLinks.length, 
-                privateCount: privateLinks.length,
                 isLoggedIn: isLoggedIn,
                 hasToken: !!localStorage.getItem('authToken')
             });
@@ -1714,7 +1842,7 @@ const HTML_CONTENT = `
         const name = document.getElementById('name-input').value;
         const url = document.getElementById('url-input').value;
         const tips = document.getElementById('tips-input').value;
-        const icon = document.getElementById('icon-input').value;
+        const icon = document.getElementById('icon-input').value.trim();
         const category = document.getElementById('category-select').value;
         const isPrivate = document.getElementById('private-checkbox').checked;
     
@@ -1723,15 +1851,18 @@ const HTML_CONTENT = `
         disableDialogControl()
 
         try {
-            // 替换旧链接
-            const list = oldLink.isPrivate ? privateLinks : publicLinks;
-            const index = list.findIndex(l => l.url === oldLink.url);
-            if (index !== -1) {
-                list[index] = updatedLink;
-            }
-        
-            // 同步更新 links
-            links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
+            for (const [categoryName, linksInCategory] of Object.entries(categories)) {
+				const index = linksInCategory.findIndex(l => l.url === oldLink.url);
+				if (index !== -1) {
+					if (categoryName !== category) {
+						linksInCategory.splice(index, 1);
+						categories[category].push(updatedLink);
+					} else {
+						linksInCategory[index] = updatedLink;
+					}
+					break;
+				}
+			}
         
             await saveLinks();
             renderCategories(); 
@@ -1760,6 +1891,7 @@ const HTML_CONTENT = `
             adminBtn.textContent = "离开设置";
             adminBtn.style.display = 'inline-block';
             settingPanel.style.display = 'flex';
+			setSearchDisabledState(true);
         } else if (isLoggedIn) {
             adminBtn.textContent = "设  置";
             adminBtn.style.display = 'inline-block';
@@ -1767,6 +1899,7 @@ const HTML_CONTENT = `
         } else {
             adminBtn.style.display = 'none';
             settingPanel.style.display = 'none';
+			setSearchDisabledState(false);
         }
     
         logAction('更新UI状态', { isAdmin, isLoggedIn });
@@ -1775,7 +1908,6 @@ const HTML_CONTENT = `
     // 登录状态显示（加载所有链接）
     function showSecretGarden() {
         if (isLoggedIn) {
-            links = [...publicLinks, ...privateLinks];
             loadSections();
             // 显示所有私密标签
             document.querySelectorAll('.private-tag').forEach(tag => {
@@ -1787,80 +1919,13 @@ const HTML_CONTENT = `
     
     // 加载分类和链接
     function loadSections() {
-        const container = document.getElementById('sections-container');
-        container.innerHTML = '';
-    
-        Object.keys(categories).forEach(category => {
-            const section = document.createElement('div');
-            section.className = 'section';
-    
-            const titleContainer = document.createElement('div');
-            titleContainer.className = 'section-title-container';
-    
-            const title = document.createElement('div');
-            title.className = 'section-title';
-            title.textContent = category;
-    
-            titleContainer.appendChild(title);
-    
-            if (isAdmin) {
-                const editBtn = document.createElement('button');
-                editBtn.textContent = '编辑名称';
-                editBtn.className = 'edit-category-btn';
-                editBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-                editBtn.onclick = () => editCategoryName(category);
-                titleContainer.appendChild(editBtn);
-                
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = '删除分类';
-                deleteBtn.className = 'delete-category-btn';
-                deleteBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none'; 
-                deleteBtn.onclick = () => deleteCategory(category);
-                titleContainer.appendChild(deleteBtn);
-                
-                const upBtn = document.createElement('button');
-                upBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6l-6 6h4v6h4v-6h4z"/></svg>';
-                upBtn.className = 'move-category-btn';
-                upBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-                upBtn.onclick = () => moveCategory(category, -1);
-                titleContainer.appendChild(upBtn);
-                
-                const downBtn = document.createElement('button');
-                downBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18l6-6h-4v-6h-4v6h-4z"/></svg>';
-                downBtn.className = 'move-category-btn';
-                downBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-                downBtn.onclick = () => moveCategory(category, 1);
-                titleContainer.appendChild(downBtn);
-            }
-    
-            const cardContainer = document.createElement('div');
-            cardContainer.className = 'card-container';
-            cardContainer.id = category;
-    
-            section.appendChild(titleContainer);
-            section.appendChild(cardContainer);
-    
-            let privateCount = 0;
-            let linkCount = 0;
-    
-            links.forEach(link => {
-                if (link.category === category) {
-                    if (link.isPrivate) privateCount++;
-                    linkCount++;
-                    createCard(link, cardContainer);
-                }
-            });
-    
-            if (privateCount < linkCount || isLoggedIn) {
-                container.appendChild(section);
-            }
-        });
-
-        // 渲染分类快捷按钮
-        renderCategoryButtons();
-    
-        logAction('加载分类和链接', { isAdmin: isAdmin, linkCount: links.length, categoryCount: Object.keys(categories).length });
-    }
+		document.getElementById('clear-search-button').style.display = 'none';
+		document.getElementById('search-input').value = '';
+		renderCategorySections({
+			renderButtons: true,
+			logTag: '加载分类和链接'
+		});
+	}
 
 
     function isValidUrl(url) {
@@ -1910,7 +1975,7 @@ const HTML_CONTENT = `
             !link.icon.trim() || 
             !isValidUrl(link.icon)
         ) 
-            ? imgApi + extractDomain(link.url) 
+            ? imgApi + extractDomain(link.url)
             : link.icon;
 
         icon.alt = 'Website Icon';
@@ -2018,18 +2083,20 @@ const HTML_CONTENT = `
     
     // 更新分类选择下拉框
     function updateCategorySelect() {
-        const categorySelect = document.getElementById('category-select');
-        categorySelect.innerHTML = '';
-    
-        Object.keys(categories).forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categorySelect.appendChild(option);
-        });
-    
-        logAction('更新分类选择', { categoryCount: Object.keys(categories).length });
-    }
+		const categorySelect = document.getElementById('category-select');
+		const fragment = document.createDocumentFragment();
+
+		Object.keys(categories).forEach(category => {
+			const option = document.createElement('option');
+			option.value = category;
+			option.textContent = category;
+			fragment.appendChild(option);
+		});
+
+		categorySelect.replaceChildren(...fragment.childNodes);
+
+		logAction('更新分类选择', { categoryCount: Object.keys(categories).length });
+	}
     
     // 保存链接数据
     async function saveLinks() {
@@ -2037,7 +2104,7 @@ const HTML_CONTENT = `
             return;
         }
 
-        let allLinks = [...publicLinks, ...privateLinks];
+		const allLinks = getAllLinks();
     
         try {
             await fetch('/api/saveOrder', {
@@ -2048,7 +2115,6 @@ const HTML_CONTENT = `
                 },
                 body: JSON.stringify({ 
                     userId: 'testUser', 
-                    links: allLinks,
                     categories: categories
                 }),
             });
@@ -2111,6 +2177,8 @@ const HTML_CONTENT = `
                 errorMessage = '请输入名称';
             } else if (!url) {
                 errorMessage = '请输入URL';
+            } else if (!category) {
+                errorMessage = '请先添加分类';
             }
     
             // 显示错误提示并重新聚焦到第一个缺失的字段
@@ -2124,7 +2192,7 @@ const HTML_CONTENT = `
         }
     
         const normalizedUrl = url.toLowerCase();
-        const allLinks = [...publicLinks, ...privateLinks];
+        const allLinks = getAllLinks();
         const isUrlExists = allLinks.some(link => link.url.toLowerCase() === normalizedUrl);
         
         if (isUrlExists) {
@@ -2138,13 +2206,7 @@ const HTML_CONTENT = `
         disableDialogControl();
 
         try {
-            if (isPrivate) {
-                privateLinks.push(newLink);
-            } else {
-                publicLinks.push(newLink);
-            }
-        
-            links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
+			categories[category].push(newLink);
     
             await saveLinks();
         
@@ -2183,16 +2245,13 @@ const HTML_CONTENT = `
         const url = card.getAttribute('data-url');
         const isPrivate = card.dataset.isPrivate === 'true';
         
-        links = links.filter(link => link.url !== url);
-        if (isPrivate) {
-            privateLinks = privateLinks.filter(link => link.url !== url);
-        } else {
-            publicLinks = publicLinks.filter(link => link.url !== url);
-        }
-    
-        for (const key in categories) {
-            categories[key] = categories[key].filter(link => link.url !== url);
-        }
+        for (const category in categories) {
+			const index = categories[category].findIndex(link => link.url === url);
+			if (index !== -1) {
+				categories[category].splice(index, 1);
+				break;
+			}
+		}
 
         card.remove(); 
         saveLinks().catch(err => {
@@ -2356,16 +2415,21 @@ const HTML_CONTENT = `
         const cardUrl = card.getAttribute('data-url');
         const isPrivate = card.dataset.isPrivate === 'true';
     
-        const linkIndex = links.findIndex(link => link.url === cardUrl);
-        if (linkIndex !== -1) {
-            links[linkIndex].category = newCategory;
-        }
-    
-        const linkArray = isPrivate ? privateLinks : publicLinks;
-        const arrayIndex = linkArray.findIndex(link => link.url === cardUrl);
-        if (arrayIndex !== -1) {
-            linkArray[arrayIndex].category = newCategory;
-        }
+        for (const category in categories) {
+			const index = categories[category].findIndex(link => link.url === cardUrl);
+			if (index !== -1) {
+				// 如果新分类不存在则创建
+				if (!categories[newCategory]) {
+					categories[newCategory] = [];
+				}
+				
+				// 移动链接
+				const [link] = categories[category].splice(index, 1);
+				link.category = newCategory;
+				categories[newCategory].push(link);
+				break;
+			}
+		}
     
         card.dataset.category = newCategory;
     }
@@ -2380,92 +2444,108 @@ const HTML_CONTENT = `
     
     // 保存卡片顺序
     async function saveCardOrder() {
-        if (!await validateToken()) {
-            return; 
-        }
-        const containers = document.querySelectorAll('.card-container');
-        let newPublicLinks = [];
-        let newPrivateLinks = [];
-        let newCategories = {};
-    
-        containers.forEach(container => {
-            const category = container.id;
-            newCategories[category] = [];
-    
-            [...container.children].forEach(card => {
-                const url = card.getAttribute('data-url');
-                const tips = card.querySelector('.card-tip').textContent
-                const name = card.querySelector('.card-title').textContent;
-                const iconElement = card.querySelector('.card-icon');
-                const src = iconElement ? iconElement.getAttribute('src') : '';
-                const icon = src.startsWith(imgApi) ? '' : src;
-                const isPrivate = card.dataset.isPrivate === 'true';
-                card.dataset.category = category;
-                const link = { name, url, tips, icon, category, isPrivate };
-                if (isPrivate) {
-                    newPrivateLinks.push(link);
-                } else {
-                    newPublicLinks.push(link);
-                }
-                newCategories[category].push(link); 
-            });
-        });
-    
-        publicLinks.length = 0;
-        publicLinks.push(...newPublicLinks);
-        privateLinks.length = 0;
-        privateLinks.push(...newPrivateLinks);
-        Object.keys(categories).forEach(key => delete categories[key]);
-        Object.assign(categories, newCategories);
-    
-        logAction('保存卡片顺序', { 
-            publicCount: newPublicLinks.length, 
-            privateCount: newPrivateLinks.length, 
-            categoryCount: Object.keys(newCategories).length 
-        });
-    
-        try {
-            const response = await fetch('/api/saveOrder', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': localStorage.getItem('authToken')
-                },
-                body: JSON.stringify({ 
-                    userId: 'testUser', 
-                    links: [...newPublicLinks, ...newPrivateLinks],
-                    categories: newCategories
-                }),
-            });
-            const result = await response.json();
-            if (!result.success) {
-                throw new Error('Failed to save order');
-            }
-            logAction('保存卡片顺序', { publicCount: newPublicLinks.length, privateCount: newPrivateLinks.length, categoryCount: Object.keys(newCategories).length });
-        } catch (error) {
-            logAction('保存顺序失败', { error: error.message });
-            alert('保存顺序失败，请重试');
-        }
-    }             
+		if (!await validateToken()) {
+			return; 
+		}
+		
+		const containers = document.querySelectorAll('.card-container');
+		const allLinks = getAllLinks();
+		
+		// 清空categories并重新填充
+		const newCategories = {};
+		
+		containers.forEach(container => {
+			const category = container.id;
+			newCategories[category] = [];
+			
+			[...container.children].forEach(card => {
+				if (card.classList.contains('card')) {
+					const url = card.getAttribute('data-url');
+					const tips = card.querySelector('.card-tip').textContent;
+					const name = card.querySelector('.card-title').textContent;
+					const iconElement = card.querySelector('.card-icon');
+					const src = iconElement ? iconElement.getAttribute('src') : '';
+					const icon = src.startsWith(imgApi) ? '' : src;
+					const isPrivate = card.dataset.isPrivate === 'true';
+					
+					// 更新或创建链接对象
+					const existingLink = Object.values(categories).flat().find(
+						link => link.url === url
+					);
+					
+					newCategories[category].push(existingLink || { 
+						name, 
+						url, 
+						tips, 
+						icon, 
+						category, 
+						isPrivate 
+					});
+				}
+			});
+		});
+		
+		// 替换旧categories
+		Object.keys(categories).forEach(key => delete categories[key]);
+		Object.assign(categories, newCategories);
+		
+		logAction('保存卡片顺序', { 
+			categoryCount: Object.keys(newCategories).length,
+			linkCount: allLinks.length
+		});
+		
+		try {
+			const response = await fetch('/api/saveOrder', {
+				method: 'POST',
+				headers: { 
+					'Content-Type': 'application/json',
+					'Authorization': localStorage.getItem('authToken')
+				},
+				body: JSON.stringify({ 
+					userId: 'testUser', 
+					categories: newCategories
+				}),
+			});
+			const result = await response.json();
+			if (!result.success) {
+				throw new Error('Failed to save order');
+			}
+			logAction('保存卡片顺序成功', { 
+				categoryCount: Object.keys(newCategories).length,
+				linkCount: allLinks.length
+			});
+		} catch (error) {
+			logAction('保存顺序失败', { error: error.message });
+			alert('保存顺序失败，请重试');
+		}
+	}             
     
     // 设置状态重新加载卡片
     async function reloadCardsAsAdmin() {
-        document.querySelectorAll('.card-container').forEach(container => {
-            container.innerHTML = '';
-        });
-        await loadLinks().then(() => {
-            if (isDarkTheme) {
-                applyDarkTheme();
-            }
-        });
-        logAction('重新加载卡片（管理员模式）');
-    }
-    
+		// 加载时加淡出效果
+		const container = document.getElementById('sections-container');
+		container.style.opacity = '0.3';
+
+		await loadLinks(); 
+
+		// 加载完淡入
+		container.style.transition = 'opacity 0.3s';
+		container.style.opacity = '1';
+
+		if (isDarkTheme) {
+			applyDarkTheme();
+		}
+
+		logAction('重新加载卡片（管理员模式）');
+	}
     
     // 切换设置状态
     async function toggleAdminMode() {
         const adminBtn = document.getElementById('admin-mode-btn');
         const settingPanel = document.querySelector('.setting-panel');
+		const searchInput = document.getElementById('search-input');
+		const searchButton = document.getElementById('search-button');
+		const clearSearchButton = document.getElementById('clear-search-button');
         
         try {
             showLoading(isAdmin ? '正在退出设置模式...' : '正在进入设置模式...');
@@ -2539,9 +2619,7 @@ const HTML_CONTENT = `
             isLoggedIn = false;
             isAdmin = false;
             localStorage.removeItem('authToken');
-            links = publicLinks;
-            loadSections();
-            // alert('退出登录！');
+            loadLinks();
             updateUIState();
             logAction('退出登录');
         }
@@ -2570,7 +2648,7 @@ const HTML_CONTENT = `
                 return;
             }
     
-            verifyPassword(password).then(result => {
+            login(password).then(result => {
                 if (result.valid) {
                     isLoggedIn = true;
                     localStorage.setItem('authToken', result.token);
@@ -2601,6 +2679,7 @@ const HTML_CONTENT = `
     
         // 回车键触发确定按钮
         const handleKeyDown = (e) => {
+			if (!dialog.contains(document.activeElement)) return;
             if (e.key === 'Enter') {
                 e.preventDefault(); // 防止表单提交等默认行为
                 handleLogin();
@@ -2820,8 +2899,8 @@ const HTML_CONTENT = `
     }
     
     // 验证密码
-    async function verifyPassword(inputPassword) {
-        const response = await fetch('/api/verifyPassword', {
+    async function login(inputPassword) {
+        const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: inputPassword }),
@@ -2847,9 +2926,9 @@ const HTML_CONTENT = `
         }
 
         try {
-            const response = await fetch('/api/getLinks?userId=testUser', {
-                headers: { 'Authorization': token }
-            });
+            const response = await fetch('/api/validateToken', {
+				headers: { 'Authorization': token }
+			});
             
             if (response.status === 401) {
                 await resetToLoginState('token已过期，请重新登录'); 
@@ -2880,7 +2959,6 @@ const HTML_CONTENT = `
         
         
         updateUIState();
-        links = publicLinks;
         loadSections();
         
         const settingPanel = document.querySelector('.setting-panel');
@@ -2914,48 +2992,47 @@ const HTML_CONTENT = `
      * @returns {Promise<void>} - 点击确定后 resolve
      */
     function customAlert(message, title = '提示', confirmText = '确定') {
-        return new Promise((resolve) => {
-          const overlay = document.getElementById('custom-alert-overlay');
-          const box = document.getElementById('custom-alert-box');
-          const titleEl = document.getElementById('custom-alert-title');
-          const contentEl = document.getElementById('custom-alert-content');
-          const confirmBtn = document.getElementById('custom-alert-confirm');
-          
-          // 设置内容
-          titleEl.textContent = title;
-          contentEl.textContent = message;
-          confirmBtn.textContent = confirmText;
-          
-          // 显示弹窗
-          overlay.style.display = 'flex';
-          
-          // 确认按钮事件
-          const handleConfirm = () => {
-            overlay.style.display = 'none';
-            confirmBtn.removeEventListener('click', handleConfirm);
-            resolve();
-          };
-          
-          confirmBtn.addEventListener('click', handleConfirm);
-          
-          // ESC键关闭
-          const handleKeyDown = (e) => {
-            if (e.key === 'Escape') {
-              handleConfirm();
-              document.removeEventListener('keydown', handleKeyDown);
-            }
-          };
-          
-          document.addEventListener('keydown', handleKeyDown);
-          
-          // 点击遮罩层关闭（可选）
-          overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-              handleConfirm();
-            }
-          });
-        });
-      }
+		return new Promise((resolve) => {
+			const overlay = document.getElementById('custom-alert-overlay');
+			const box = document.getElementById('custom-alert-box');
+			const titleEl = document.getElementById('custom-alert-title');
+			const contentEl = document.getElementById('custom-alert-content');
+			const confirmBtn = document.getElementById('custom-alert-confirm');
+			
+			titleEl.textContent = title;
+			contentEl.textContent = message;
+			confirmBtn.textContent = confirmText;
+			
+			overlay.style.display = 'flex';
+
+			// 只在弹窗内监听键盘事件
+			const handleKeyDown = (e) => {
+				// 判断事件目标是否在弹窗内
+				if (!box.contains(document.activeElement)) return;
+				
+				if (e.key === 'Escape' || e.key === 'Enter') {
+				e.preventDefault();  // 阻止事件冒泡或默认行为，防止触发别处
+				handleConfirm();
+				}
+			};
+
+			const handleConfirm = () => {
+				overlay.style.display = 'none';
+				confirmBtn.removeEventListener('click', handleConfirm);
+				document.removeEventListener('keydown', handleKeyDown);
+				resolve();
+			};
+
+			confirmBtn.addEventListener('click', handleConfirm);
+			document.addEventListener('keydown', handleKeyDown);
+			
+			overlay.addEventListener('click', (e) => {
+				if (e.target === overlay) {
+				handleConfirm();
+				}
+			});
+		});
+	}
 
         /**
          * 显示分类名称输入弹窗 (专用)
@@ -2964,61 +3041,62 @@ const HTML_CONTENT = `
          * @returns {Promise<string|null>} - 返回输入的字符串或null(取消)
          */
         function showCategoryDialog(title, defaultValue = '') {
-            return new Promise((resolve) => {
-                const dialog = document.getElementById('category-dialog');
-                const input = document.getElementById('category-name-input');
-                const titleEl = document.getElementById('category-dialog-title');
-                
-                // 设置弹窗内容
-                titleEl.textContent = title;
-                input.value = defaultValue;
-                
-                // 显示弹窗
-                dialog.style.display = 'flex';
-                setTimeout(() => input.focus(), 50);
+			return new Promise((resolve) => {
+				const dialog = document.getElementById('category-dialog');
+				const input = document.getElementById('category-name-input');
+				const titleEl = document.getElementById('category-dialog-title');
+				const confirmBtn = document.getElementById('category-confirm-btn');
+				const cancelBtn = document.getElementById('category-cancel-btn');
 
-                // 事件处理函数
-                const handleConfirm = () => {
-                const value = input.value.trim();
-                if (value) {
-                    cleanup();
-                    resolve(value);
-                } else {
-                    input.focus();
-                }
-                };
+				titleEl.textContent = title;
+				input.value = defaultValue;
 
-                const handleCancel = () => {
-                    cleanup();
-                    resolve(null);
-                };
+				dialog.style.display = 'flex';
+				setTimeout(() => input.focus(), 50);
 
-                const handleKeyDown = (e) => {
-                    if (e.key === 'Enter') handleConfirm();
-                    if (e.key === 'Escape') handleCancel();
-                };
+				const handleConfirm = () => {
+					const value = input.value.trim();
+					if (value) {
+						cleanup();
+						resolve(value);
+					} else {
+						input.focus();
+					}
+				};
 
-                // 清理函数
-                const cleanup = () => {
-                    dialog.style.display = 'none';
-                    document.removeEventListener('keydown', handleKeyDown);
-                    // 移除按钮事件监听
-                    confirmBtn.onclick = null;
-                    cancelBtn.onclick = null;
-                    dialog.onclick = null;
-                };
+				const handleCancel = () => {
+					cleanup();
+					resolve(null);
+				};
 
-                // 获取按钮引用
-                const confirmBtn = document.getElementById('category-confirm-btn');
-                const cancelBtn = document.getElementById('category-cancel-btn');
+				const handleKeyDown = (e) => {
+					// 只有当焦点在弹窗内时才响应
+					if (!dialog.contains(document.activeElement)) return;
 
-                // 绑定事件
-                confirmBtn.onclick = handleConfirm;
-                cancelBtn.onclick = handleCancel;
-                document.addEventListener('keydown', handleKeyDown);
-                dialog.onclick = (e) => e.target === dialog && handleCancel();
-            });
-        }
+					if (e.key === 'Enter') {
+						e.preventDefault();
+						handleConfirm();
+					}
+					if (e.key === 'Escape') {
+						e.preventDefault();
+						handleCancel();
+					}
+				};
+
+				const cleanup = () => {
+					dialog.style.display = 'none';
+					document.removeEventListener('keydown', handleKeyDown);
+					confirmBtn.onclick = null;
+					cancelBtn.onclick = null;
+					dialog.onclick = null;
+				};
+
+				confirmBtn.onclick = handleConfirm;
+				cancelBtn.onclick = handleCancel;
+				document.addEventListener('keydown', handleKeyDown);
+				dialog.onclick = (e) => e.target === dialog && handleCancel();
+			});
+		}
 
         /**
          * 自定义Confirm弹窗
@@ -3028,47 +3106,51 @@ const HTML_CONTENT = `
          * @returns {Promise<boolean>} - 返回用户选择(true=确定, false=取消)
          */
         function customConfirm(message, okText = '确定', cancelText = '取消') {
-            return new Promise((resolve) => {
-                const overlay = document.getElementById('custom-confirm-overlay');
-                const messageEl = document.getElementById('custom-confirm-message');
-                const okBtn = document.getElementById('custom-confirm-ok');
-                const cancelBtn = document.getElementById('custom-confirm-cancel');
-                
-                // 设置弹窗内容
-                messageEl.textContent = message;
-                okBtn.textContent = okText;
-                cancelBtn.textContent = cancelText;
-                
-                // 显示弹窗
-                overlay.style.display = 'flex';
-                
-                // 事件处理函数
-                const handleConfirm = (result) => {
-                    cleanup();
-                    resolve(result);
-                };
-                
-                const handleKeyDown = (e) => {
-                    if (e.key === 'Enter') handleConfirm(true);
-                    if (e.key === 'Escape') handleConfirm(false);
-                };
-                
-                // 清理函数
-                const cleanup = () => {
-                    overlay.style.display = 'none';
-                    document.removeEventListener('keydown', handleKeyDown);
-                    okBtn.onclick = null;
-                    cancelBtn.onclick = null;
-                    overlay.onclick = null;
-                };
-                
-                // 绑定事件
-                okBtn.onclick = () => handleConfirm(true);
-                cancelBtn.onclick = () => handleConfirm(false);
-                document.addEventListener('keydown', handleKeyDown);
-                overlay.onclick = (e) => e.target === overlay && handleConfirm(false);
-            });
-        }
+			return new Promise((resolve) => {
+				const overlay = document.getElementById('custom-confirm-overlay');
+				const messageEl = document.getElementById('custom-confirm-message');
+				const okBtn = document.getElementById('custom-confirm-ok');
+				const cancelBtn = document.getElementById('custom-confirm-cancel');
+
+				messageEl.textContent = message;
+				okBtn.textContent = okText;
+				cancelBtn.textContent = cancelText;
+
+				overlay.style.display = 'flex';
+
+				const handleConfirm = (result) => {
+					cleanup();
+					resolve(result);
+				};
+
+				const handleKeyDown = (e) => {
+					// 只有焦点在弹窗内时生效
+					if (!overlay.contains(document.activeElement)) return;
+
+					if (e.key === 'Enter') {
+						e.preventDefault();
+						handleConfirm(true);
+					}
+					if (e.key === 'Escape') {
+						e.preventDefault();
+						handleConfirm(false);
+					}
+				};
+
+				const cleanup = () => {
+					overlay.style.display = 'none';
+					document.removeEventListener('keydown', handleKeyDown);
+					okBtn.onclick = null;
+					cancelBtn.onclick = null;
+					overlay.onclick = null;
+				};
+
+				okBtn.onclick = () => handleConfirm(true);
+				cancelBtn.onclick = () => handleConfirm(false);
+				document.addEventListener('keydown', handleKeyDown);
+				overlay.onclick = (e) => e.target === overlay && handleConfirm(false);
+			});
+		}
 
         function showLoading(message = '加载中，请稍候...') {
             const mask = document.getElementById('loading-mask');
@@ -3125,265 +3207,505 @@ const HTML_CONTENT = `
             tooltip.style.display = 'none';
         }
 
+		// 导出数据功能
+		async function exportData() {
+			if (!(await validateToken())) {
+				return;
+			}
+
+			const confirmed = await customConfirm("确定要导出数据吗？");
+			if (!confirmed) {
+				return; 
+			}
+
+			try {
+				showLoading("正在导出数据...");
+
+				const response = await fetch("/api/exportData", {
+					method: "POST",
+					headers: {
+						"Authorization": localStorage.getItem("authToken")
+					}
+				});
+
+				if (!response.ok) {
+					throw new Error("导出失败");
+				}
+
+				const data = await response.json();
+
+				// 创建 Blob 并触发下载
+				const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+				const url = URL.createObjectURL(blob);
+
+				const a = document.createElement("a");
+				a.href = url;
+				var date = new Date().toISOString().split("T")[0];
+				a.download = "export_datas_" + date + ".json";
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				URL.revokeObjectURL(url);
+
+				logAction("数据导出成功");
+			} catch (error) {
+				logAction("数据导出失败", { error: error.message });
+				customConfirm("导出失败，请重试");
+			} finally {
+				hideLoading();
+			}
+		}
+
     </script>
 </body>
 
 </html>
 `;
 
+function base64UrlEncode(str) {
+  return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function base64UrlEncodeUint8(arr) {
+  const str = String.fromCharCode(...arr);
+  return base64UrlEncode(str);
+}
+
+function base64UrlDecode(str) {
+  str = str.replace(/-/g, "+").replace(/_/g, "/");
+  while (str.length % 4) str += "=";
+  return atob(str);
+}
+
+async function createJWT(payload, secret) {
+  const encoder = new TextEncoder();
+  const header = {
+    alg: "HS256",
+    typ: "JWT",
+  };
+
+  const headerEncoded = base64UrlEncode(JSON.stringify(header));
+  const payloadEncoded = base64UrlEncode(JSON.stringify(payload));
+  const toSign = encoder.encode(`${headerEncoded}.${payloadEncoded}`);
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    {
+      name: "HMAC",
+      hash: "SHA-256",
+    },
+    false,
+    ["sign"]
+  );
+
+  const signature = await crypto.subtle.sign("HMAC", key, toSign);
+  const signatureEncoded = base64UrlEncodeUint8(new Uint8Array(signature));
+
+  return `${headerEncoded}.${payloadEncoded}.${signatureEncoded}`;
+}
+
+async function validateJWT(token, secret) {
+  const encoder = new TextEncoder();
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+
+  const [headerEncoded, payloadEncoded, signature] = parts;
+  const data = encoder.encode(`${headerEncoded}.${payloadEncoded}`);
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    {
+      name: "HMAC",
+      hash: "SHA-256",
+    },
+    false,
+    ["sign"]
+  );
+
+  const expectedSigBuffer = await crypto.subtle.sign("HMAC", key, data);
+  const expectedSig = base64UrlEncodeUint8(new Uint8Array(expectedSigBuffer));
+
+  if (signature !== expectedSig) return null;
+
+  const payloadStr = base64UrlDecode(payloadEncoded);
+  return JSON.parse(payloadStr);
+}
+
 // 服务端 token 验证
-async function validateServerToken(authToken, env) {
-    if (!authToken) {
-        return {
-            isValid: false,
-            status: 401,
-            response: { error: 'Unauthorized', message: '未登录或登录已过期' }
-        };
-    }
+async function validateServerToken(authHeader, env) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return {
+      isValid: false,
+      status: 401,
+      response: {
+        error: "Unauthorized",
+        message: "未登录或登录已过期",
+      },
+    };
+  }
 
-    try {
-        const [timestamp, hash] = authToken.split('.');
-        const tokenTimestamp = parseInt(timestamp);
-        const now = Date.now();
-        
-        const FIFTEEN_MINUTES = 15 * 60 * 1000;
-        if (now - tokenTimestamp > FIFTEEN_MINUTES) {
-            return {
-                isValid: false,
-                status: 401,
-                response: { 
-                    error: 'Token expired',
-                    tokenExpired: true,
-                    message: '登录已过期，请重新登录'
-                }
-            };
-        }
-        
-        const tokenData = timestamp + "_" + env.ADMIN_PASSWORD;
-        const encoder = new TextEncoder();
-        const data = encoder.encode(tokenData);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const expectedHash = btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
-        
-        if (hash !== expectedHash) {
-            return {
-                isValid: false,
-                status: 401,
-                response: { 
-                    error: 'Invalid token',
-                    tokenInvalid: true,
-                    message: '登录状态无效，请重新登录'
-                }
-            };
-        }
+  const token = authHeader.slice(7);
+  const payload = await validateJWT(token, env.ADMIN_PASSWORD);
+  if (!payload) {
+    return {
+      isValid: false,
+      status: 401,
+      response: {
+        error: "Invalid token",
+        tokenInvalid: true,
+        message: "登录状态无效，请重新登录",
+      },
+    };
+  }
 
-        return { isValid: true };
-    } catch (error) {
-        return {
-            isValid: false,
-            status: 401,
-            response: { 
-                error: 'Invalid token',
-                tokenInvalid: true,
-                message: '登录验证失败，请重新登录'
-            }
-        };
-    }
+  const now = Math.floor(Date.now() / 1000);
+  if (payload.exp < now) {
+    return {
+      isValid: false,
+      status: 401,
+      response: {
+        error: "Token expired",
+        tokenExpired: true,
+        message: "登录已过期，请重新登录",
+      },
+    };
+  }
+
+  return {
+    isValid: true,
+    payload,
+  };
 }
 
 export default {
-    async fetch(request, env) {
-      const url = new URL(request.url);
-  
-      if (url.pathname === '/') {
-        return new Response(HTML_CONTENT, {
-          headers: { 'Content-Type': 'text/html' }
-        });
-      }
-  
-      if (url.pathname === '/api/getLinks') {
-        const userId = url.searchParams.get('userId');
-        const authToken = request.headers.get('Authorization');
-        const data = await env.CARD_ORDER.get(userId);
-  
-        if (data) {
-            const parsedData = JSON.parse(data);
-            
-            // 验证 token
-            if (authToken) {
-                const validation = await validateServerToken(authToken, env);
-                if (!validation.isValid) {
-                    return new Response(JSON.stringify(validation.response), {
-                        status: validation.status,
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                }
+  async fetch(request, env) {
+    const url = new URL(request.url);
 
-                // Token 有效，返回完整数据
-                return new Response(JSON.stringify(parsedData), {
-                    status: 200,
-                    headers: { 'Content-Type': 'application/json' }
-                });
-            }
-            
-            // 未提供 token，只返回公开数据
-            const filteredLinks = parsedData.links.filter(link => !link.isPrivate);
-            const filteredCategories = {};
-            Object.keys(parsedData.categories).forEach(category => {
-                filteredCategories[category] = parsedData.categories[category].filter(link => !link.isPrivate);
-            });
-  
-            return new Response(JSON.stringify({
-                links: filteredLinks,
-                categories: filteredCategories
-            }), {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
-  
-        return new Response(JSON.stringify({
-            links: [],
-            categories: {}
-        }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-        });
-      }
-  
-      if (url.pathname === '/api/saveOrder' && request.method === 'POST') {
-        const authToken = request.headers.get('Authorization');
-        const validation = await validateServerToken(authToken, env);
-        
-        if (!validation.isValid) {
-            return new Response(JSON.stringify(validation.response), {
-                status: validation.status,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
-
-        const { userId, links, categories } = await request.json();
-        await env.CARD_ORDER.put(userId, JSON.stringify({ links, categories }));
-        return new Response(JSON.stringify({ 
-            success: true,
-            message: '保存成功'
-        }), { 
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-        });
-      }
-  
-      if (url.pathname === '/api/verifyPassword' && request.method === 'POST') { 
-        try {
-            const { password } = await request.json();
-            const isValid = password === env.ADMIN_PASSWORD;
-            
-            if (isValid) {
-                // 生成包含时间戳的加密 token
-                const timestamp = Date.now();
-                const tokenData = timestamp + "_" + env.ADMIN_PASSWORD; 
-                const encoder = new TextEncoder();
-                const data = encoder.encode(tokenData);
-                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-                
-                // 使用指定格式：timestamp.hash
-                const token = timestamp + "." + btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
-                
-                return new Response(JSON.stringify({ 
-                    valid: true,
-                    token: token 
-                }), {
-                    status: 200,
-                    headers: { 'Content-Type': 'application/json' }
-                });
-            }
-            
-            return new Response(JSON.stringify({ 
-                valid: false,
-                error: 'Invalid password'
-            }), {
-                status: 403,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        } catch (error) {
-            return new Response(JSON.stringify({ 
-                valid: false,
-                error: error.message 
-            }), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
-      }
-  
-      if (url.pathname === '/api/backupData' && request.method === 'POST') {
-        const { sourceUserId } = await request.json();
-        const result = await this.backupData(env, sourceUserId);
-        return new Response(JSON.stringify(result), {
-          status: result.success ? 200 : 404,
-          headers: { 'Content-Type': 'application/json' }
-        });
-      }  
-  
-      return new Response('Not Found', { status: 404 });
-    },
-  
-    async backupData(env, sourceUserId) {
-        const MAX_BACKUPS = 10;
-        const sourceData = await env.CARD_ORDER.get(sourceUserId);
-        
-        if (sourceData) {
-            try {
-                const currentDate = new Date().toLocaleString('zh-CN', {
-                    timeZone: 'Asia/Shanghai',
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                }).replace(/\//g, '-'); 
-                
-                const backupId = `backup_${currentDate}`;
-                
-                const backups = await env.CARD_ORDER.list({ prefix: 'backup_' });
-                const backupKeys = backups.keys.map(key => key.name).sort((a, b) => {
-                    const timeA = new Date(a.split('_')[1].replace(/-/g, '/')).getTime();
-                    const timeB = new Date(b.split('_')[1].replace(/-/g, '/')).getTime();
-                    return timeB - timeA;  // 降序排序，最新的在前
-                });
-                
-                await env.CARD_ORDER.put(backupId, sourceData);
-                
-                const allBackups = [...backupKeys, backupId].sort((a, b) => {
-                    const timeA = new Date(a.split('_')[1].replace(/-/g, '/')).getTime();
-                    const timeB = new Date(b.split('_')[1].replace(/-/g, '/')).getTime();
-                    return timeB - timeA;
-                });
-                
-                const backupsToDelete = allBackups.slice(MAX_BACKUPS);
-                
-                if (backupsToDelete.length > 0) {
-                    await Promise.all(
-                        backupsToDelete.map(key => env.CARD_ORDER.delete(key))
-                    );
-                }
-    
-                return { 
-                    success: true, 
-                    backupId,
-                    remainingBackups: MAX_BACKUPS,
-                    deletedCount: backupsToDelete.length 
-                };
-            } catch (error) {
-                return { 
-                    success: false, 
-                    error: 'Backup operation failed',
-                    details: error.message 
-                };
-            }
-        }
-        return { success: false, error: 'Source data not found' };
+    if (url.pathname === "/") {
+      return new Response(HTML_CONTENT, {
+        headers: {
+          "Content-Type": "text/html",
+        },
+      });
     }
-  };
+
+    if (url.pathname === "/api/validateToken") {
+      const authToken = request.headers.get("Authorization");
+      const validation = await validateServerToken(authToken, env);
+
+      if (!validation.isValid) {
+        return new Response(JSON.stringify(validation.response), {
+          status: validation.status,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
+
+      return new Response(
+        JSON.stringify({
+          valid: true,
+        }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
+    if (url.pathname === "/api/getLinks") {
+      const userId = url.searchParams.get("userId");
+      const authToken = request.headers.get("Authorization");
+      const data = await env.CARD_ORDER.get(userId);
+
+      if (data) {
+        const parsedData = JSON.parse(data);
+
+        // 如果提供 token，尝试验证
+        if (authToken) {
+          const validation = await validateServerToken(authToken, env);
+          if (!validation.isValid) {
+            return new Response(JSON.stringify(validation.response), {
+              status: validation.status,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+          }
+
+          // token 合法，返回完整数据
+          return new Response(JSON.stringify(parsedData), {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        }
+
+        // 未提供 token，过滤掉私有链接
+        const filteredCategories = {};
+        for (const category in parsedData.categories) {
+          filteredCategories[category] = parsedData.categories[category].filter(
+            (link) => !link.isPrivate
+          );
+        }
+
+        return new Response(
+          JSON.stringify({
+            categories: filteredCategories,
+          }),
+          {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          categories: {},
+        }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
+    if (url.pathname === "/api/saveOrder" && request.method === "POST") {
+      const authToken = request.headers.get("Authorization");
+      const validation = await validateServerToken(authToken, env);
+
+      if (!validation.isValid) {
+        return new Response(JSON.stringify(validation.response), {
+          status: validation.status,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
+
+      const { userId, links, categories } = await request.json();
+      await env.CARD_ORDER.put(
+        userId,
+        JSON.stringify({
+          links,
+          categories,
+        })
+      );
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: "保存成功",
+        }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
+    if (url.pathname === "/api/login" && request.method === "POST") {
+      try {
+        const { password } = await request.json();
+        if (password !== env.ADMIN_PASSWORD) {
+          return new Response(
+            JSON.stringify({
+              valid: false,
+            }),
+            {
+              status: 403,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        }
+
+        const now = Math.floor(Date.now() / 1000);
+        const payload = {
+          iat: now,
+          exp: now + 15 * 60, // 15分钟有效
+          role: "admin",
+        };
+
+        const token = await createJWT(payload, env.ADMIN_PASSWORD);
+
+        return new Response(
+          JSON.stringify({
+            valid: true,
+            token: `Bearer ${token}`,
+          }),
+          {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            valid: false,
+            error: error.message,
+          }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+    }
+
+    if (url.pathname === "/api/backupData" && request.method === "POST") {
+      const { sourceUserId } = await request.json();
+      const result = await this.backupData(env, sourceUserId);
+      return new Response(JSON.stringify(result), {
+        status: result.success ? 200 : 404,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    if (url.pathname === "/api/exportData" && request.method === "POST") {
+      const authToken = request.headers.get("Authorization");
+
+      // 验证 token 是否有效
+      const validationResult = await validateServerToken(authToken, env);
+      if (!validationResult.isValid) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            message: "Unauthorized",
+          }),
+          {
+            status: 401,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+
+      try {
+        // 获取当前用户的数据
+        const storedData = await env.CARD_ORDER.get("testUser");
+        const parsedData = storedData
+          ? JSON.parse(storedData)
+          : {
+              categories: {},
+            };
+
+        return new Response(JSON.stringify(parsedData, null, 2), {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Content-Disposition": 'attachment; filename="links_export.json"',
+          },
+        });
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            message: "读取数据失败",
+          }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+    }
+
+    return new Response("Not Found", {
+      status: 404,
+    });
+  },
+
+  async backupData(env, sourceUserId) {
+    const MAX_BACKUPS = 10;
+    const sourceData = await env.CARD_ORDER.get(sourceUserId);
+
+    if (sourceData) {
+      try {
+        const currentDate = new Date()
+          .toLocaleString("zh-CN", {
+            timeZone: "Asia/Shanghai",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          })
+          .replace(/\//g, "-");
+
+        const backupId = `backup_${currentDate}`;
+
+        const backups = await env.CARD_ORDER.list({
+          prefix: "backup_",
+        });
+        const backupKeys = backups.keys
+          .map((key) => key.name)
+          .sort((a, b) => {
+            const timeA = new Date(
+              a.split("_")[1].replace(/-/g, "/")
+            ).getTime();
+            const timeB = new Date(
+              b.split("_")[1].replace(/-/g, "/")
+            ).getTime();
+            return timeB - timeA; // 降序排序，最新的在前
+          });
+
+        await env.CARD_ORDER.put(backupId, sourceData);
+
+        const allBackups = [...backupKeys, backupId].sort((a, b) => {
+          const timeA = new Date(a.split("_")[1].replace(/-/g, "/")).getTime();
+          const timeB = new Date(b.split("_")[1].replace(/-/g, "/")).getTime();
+          return timeB - timeA;
+        });
+
+        const backupsToDelete = allBackups.slice(MAX_BACKUPS);
+
+        if (backupsToDelete.length > 0) {
+          await Promise.all(
+            backupsToDelete.map((key) => env.CARD_ORDER.delete(key))
+          );
+        }
+
+        return {
+          success: true,
+          backupId,
+          remainingBackups: MAX_BACKUPS,
+          deletedCount: backupsToDelete.length,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: "Backup operation failed",
+          details: error.message,
+        };
+      }
+    }
+    return {
+      success: false,
+      error: "Source data not found",
+    };
+  },
+};
