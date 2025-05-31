@@ -6,6 +6,7 @@
 - 稍微调整UI，优化移动端显示
 - 卡片增加简介和自定义icon，增加卡片编辑功能
 - 分类支持改名和顺序调整
+- 增加导出数据
 - 数据去掉links，只保留categories，减少数据量
 - token改为JWT
 - 其他一些调整
@@ -19,7 +20,7 @@
 
 # 部署方法：
 #### 五步即可完成部署：
-#### 1. 登录 Cloudflare：  https://www.cloudflare.com  创建workers，复制update-workers的代码，然后部署
+#### 1. 登录 Cloudflare：  https://www.cloudflare.com  创建workers，复制workers.js的代码，然后部署
 ![image](https://github.com/user-attachments/assets/c067105b-91ee-43d5-90a9-806e5de5fe16)
 
 #### 2. 新建一个名为CARD_ORDER的KV存储
