@@ -1886,12 +1886,13 @@ const HTML_CONTENT = `
         adminBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
         secretGardenBtn.textContent = isLoggedIn ? "退  出" : "登  录";
         secretGardenBtn.style.display = 'inline-block';
+		let searchDisabled = false;
     
         if (isAdmin) {
             adminBtn.textContent = "离开设置";
             adminBtn.style.display = 'inline-block';
             settingPanel.style.display = 'flex';
-			setSearchDisabledState(true);
+			searchDisabled = true;
         } else if (isLoggedIn) {
             adminBtn.textContent = "设  置";
             adminBtn.style.display = 'inline-block';
@@ -1899,8 +1900,8 @@ const HTML_CONTENT = `
         } else {
             adminBtn.style.display = 'none';
             settingPanel.style.display = 'none';
-			setSearchDisabledState(false);
         }
+		setSearchDisabledState(searchDisabled);
     
         logAction('更新UI状态', { isAdmin, isLoggedIn });
     }
