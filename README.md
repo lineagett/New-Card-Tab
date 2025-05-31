@@ -1,7 +1,14 @@
-# New-Card-Tab
+# cf-workers-nav
 ✨一个部署在CF的轻量化导航页面，可移动卡片式书签，方便管理
-### 作者项目地址：https://github.com/hmhm2022/Card-Tab ，请给原作者点星星
-在之前的版本上用Ai工具根据个人喜好修了下UI，增加了编辑卡片、卡片增加简介和自定义icon、分类改名、分类顺序调整等功能，有bug自行修复啊😁，在此再次感谢作者。
+### 原作者项目地址：https://github.com/hmhm2022/Card-Tab ，请给原作者点星星
+
+在原项目基础上进行了一些修改：
+- 稍微调整UI，优化移动端显示
+- 卡片增加简介和自定义icon，增加卡片编辑功能
+- 分类支持改名和顺序调整
+- 数据去掉links，只保留categories，减少数据量
+- token改为JWT
+- 其他一些调整
 
 演示动画（⬇️ 请等待加载完成⬇️）
 ![gif](https://github.com/user-attachments/assets/6d46222a-8069-44c0-9a08-35cdabde4005)
