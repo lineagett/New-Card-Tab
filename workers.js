@@ -570,7 +570,7 @@ const HTML_CONTENT = `
         
         .card-bottom {
             min-height: 28px;
-            line-height: 28px
+            line-height: 28px;
             overflow: hidden;
         }
 
