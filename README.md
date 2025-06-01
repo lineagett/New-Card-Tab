@@ -14,21 +14,20 @@
 - 数据去掉links，只保留categories，减少数据量
 - 其他一些调整
 
-登录部分UI
-![image](https://github.com/user-attachments/assets/f7802904-5021-432e-befd-e3aceef8b2ea)
-
-
-搜索界面
+**登录部分UI**
+![image](https://github.com/user-attachments/assets/30519d9d-739c-4ded-b6ea-41143b81ad7b)
+**搜索界面**
 ![image](https://github.com/user-attachments/assets/fb8b098e-e616-46cb-902b-715802f7abab)
+**移动端UI**
+|正常模式|黑暗模式 |
+|-|-|
+| ![image](https://github.com/user-attachments/assets/12451eb3-e32a-4531-99b4-bc2a5db96e0c) | ![image](https://github.com/user-attachments/assets/93e820af-64fa-4faa-bfb3-e42061dec21e)|
 
 
-
-
-演示动画（⬇️ 请等待加载完成⬇️）
+**演示动画**（⬇️ 请等待加载完成⬇️）
 ![gif](https://github.com/user-attachments/assets/6d46222a-8069-44c0-9a08-35cdabde4005)
 
-
-黑暗主题
+**黑暗主题**
 ![dark-theme](https://github.com/user-attachments/assets/6fa53828-cb7c-461e-8ad9-98401d860799)
 
 # 部署方法：
