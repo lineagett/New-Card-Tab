@@ -414,10 +414,6 @@ const HTML_CONTENT = `
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background-color: #43b883;
             color: white;
             border: none;
@@ -425,10 +421,9 @@ const HTML_CONTENT = `
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
             transition: all 0.2s ease;
         }
-        
-        .floating-button-group button:hover {
-            transform: translateY(-2px);
-            background-color: #369f6b;
+
+        #theme-toggle {
+            display: none;
         }
 
         #back-to-top-btn {
@@ -733,8 +728,16 @@ const HTML_CONTENT = `
             }
 
             .admin-btn svg {
-                width: 28px; 
-                height: 28px;
+                width: 32px; 
+                height: 32px;
+            }
+
+            .admin-btn.big-btn {
+                height: 40px;
+            }
+            
+            .admin-btn.padding {
+                padding: 0 5px;
             }
 
             #menu-toggle,
@@ -750,6 +753,10 @@ const HTML_CONTENT = `
             .setting-panel,
             .floating-button-group {
                 right: 10px;
+            }
+
+            #theme-toggle {
+                display: block; 
             }
             
         }
@@ -1060,6 +1067,10 @@ const HTML_CONTENT = `
                 box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2) !important;
             }
 
+            .floating-button-group button:hover {
+                transform: translateY(-2px);
+            }
+
             /* 公共提示框样式 */
             .has-tooltip {
                 position: relative;
@@ -1327,11 +1338,11 @@ const HTML_CONTENT = `
                     isDark = true;
                 } else if (savedTheme === 'light') {
                     isDark = false;
-                } else {
-                    // 没有设置，自动判断时间
-                    const hour = new Date().getHours();
-                    isDark = (hour >= 21 || hour < 6);
                 }
+            } else {
+                // 没有设置，自动判断时间
+                const hour = new Date().getHours();
+                isDark = (hour >= 21 || hour < 6);
             }
             window.isDarkTheme = isDark;
             // 避免闪白：动态写入 <body class="dark-theme">
@@ -1356,7 +1367,7 @@ const HTML_CONTENT = `
                 <!-- 下拉包裹器（用于相对定位） -->
                 <div class="admin-dropdown-wrapper">
                     <!-- 主按钮 -->
-                    <button id="admin-menu-toggle" class="admin-btn no-hover padding">
+                    <button id="admin-menu-toggle" class="admin-btn no-hover padding big-btn">
                         <span>
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="2" rx="1" fill="currentColor"/><rect x="3" y="11" width="18" height="2" rx="1" fill="currentColor"/><rect x="3" y="16" width="18" height="2" rx="1" fill="currentColor"/></svg>
                         </span>
@@ -1366,7 +1377,7 @@ const HTML_CONTENT = `
                     <!-- 下拉菜单 -->
                     <div id="admin-dropdown" class="admin-dropdown hidden">
                         <button id="secret-garden-btn" onclick="toggleSecretGarden()" class="admin-btn">登 录</button>
-                        <button id="admin-mode-btn" onclick="toggleAdminMode()" class="admin-btn" data-state="setting">设 置</button>
+                        <button id="admin-mode-btn" onclick="toggleAdminMode()" class="admin-btn" data-state="setting">编辑模式</button>
                         <div class="preference-toggle">
                             <span>主题切换</span>
                             <label class="switch">
@@ -2256,17 +2267,17 @@ const HTML_CONTENT = `
         const settingPanel = document.querySelector('.setting-panel');
         adminBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
         secretGardenBtn.dataset.state = isLoggedIn ? 'logout' : 'login';
-        secretGardenBtn.textContent = isLoggedIn ? "退  出" : "登  录";
+        secretGardenBtn.textContent = isLoggedIn ? "注销" : "登录";
         secretGardenBtn.style.display = 'inline-block';
         let searchDisabled = false;
     
         if (isAdmin) {
-            adminBtn.textContent = "离开设置";
+            adminBtn.textContent = "退出编辑";
             adminBtn.style.display = 'inline-block';
             settingPanel.style.display = 'flex';
 			searchDisabled = true;
         } else if (isLoggedIn) {
-            adminBtn.textContent = "设  置";
+            adminBtn.textContent = "编辑模式";
             adminBtn.style.display = 'inline-block';
             settingPanel.style.display = 'none';
         } else {
@@ -2312,7 +2323,6 @@ const HTML_CONTENT = `
 
     const imgApi = 'https://www.faviconextractor.com/favicon/';
 
-    // 从URL中提取域名
     function extractDomain(url) {
         let domain;
         try {
@@ -2921,7 +2931,7 @@ const HTML_CONTENT = `
 		const clearSearchButton = document.getElementById('clear-search-button');
         
         try {
-            showLoading(isAdmin ? '正在退出设置模式...' : '正在进入设置模式...');
+            showLoading(isAdmin ? '正在退出编辑模式...' : '正在进入编辑模式...');
             
             // 无论是进入还是退出设置模式，都先验证token
             if (!await validateToken()) {
@@ -2952,7 +2962,7 @@ const HTML_CONTENT = `
                 } catch (error) {
                     logAction('数据备份失败', { error: error.message });
                     const confirmed = await customConfirm(
-                        '备份失败，是否仍要继续进入设置模式？', 
+                        '备份失败，是否仍要继续进入编辑模式？', 
                         '是', 
                         '否'
                     );
@@ -2962,14 +2972,14 @@ const HTML_CONTENT = `
                 }
     
                 isAdmin = true;
-                adminBtn.textContent = "退出设置";
+                adminBtn.textContent = "退出编辑";
                 settingPanel.style.display = 'flex';
                 await reloadCardsAsAdmin();
                 logAction('进入设置');
             } else if (isAdmin) {
                 isAdmin = false;
                 editCardMode = false;
-                adminBtn.textContent = "设  置";
+                adminBtn.textContent = "编辑模式";
                 settingPanel.style.display = 'none';
                 await reloadCardsAsAdmin();
                 logAction('离开设置');
@@ -3310,14 +3320,13 @@ const HTML_CONTENT = `
             updateUIState();
             return true;
         } catch (error) {
-            console.error('Token validation error:', error);
+            console.error('Token validation error:');
             return false;
         }
     }
 
     // 重置状态
     async function resetToLoginState(message) {
-        // alert(message);
         await customAlert(message);
         
         cleanupDragState();
