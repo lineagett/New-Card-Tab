@@ -1599,22 +1599,8 @@ const HTML_CONTENT = `
 
         themeSwitchCheckbox.checked = window.isDarkTheme;
 
-        themeSwitchCheckbox.addEventListener('change', () => {
-            const isDark = themeSwitchCheckbox.checked;
-            window.isDarkTheme = isDark;
-
-            if (isDark) {
-                document.body.classList.add('dark-theme');
-            } else {
-                document.body.classList.remove('dark-theme');
-            }
-
-            // 若用户勾选了保存偏好，则存储
-            if (savePrefCheckbox && savePrefCheckbox.checked) {
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            }
-
-            logAction('切换主题', { isDarkTheme: window.isDarkTheme });
+        themeSwitchCheckbox.addEventListener('change', (e) => {
+            applyTheme(e.target.checked);
         });
 
         // 读取保存偏好设置
@@ -1677,12 +1663,6 @@ const HTML_CONTENT = `
                 // 启用保存时立即保存当前值
                 localStorage.setItem('searchEngine', currentEngine);
                 localStorage.setItem('theme', window.isDarkTheme ? 'dark' : 'light');
-
-                if (window.isDarkTheme) {
-                    applyDarkTheme();
-                } else {
-                    document.body.classList.remove('dark-theme');
-                }
 
                 // 保证select显示正确搜索引擎
                 setActiveEngine(currentEngine);
@@ -2323,6 +2303,7 @@ const HTML_CONTENT = `
 
     const imgApi = 'https://www.faviconextractor.com/favicon/';
 
+    // 从URL中提取域名
     function extractDomain(url) {
         let domain;
         try {
@@ -2915,10 +2896,6 @@ const HTML_CONTENT = `
 		container.style.transition = 'opacity 0.3s';
 		container.style.opacity = '1';
 
-		if (window.isDarkTheme) {
-			applyDarkTheme();
-		}
-
 		logAction('重新加载卡片（管理员模式）');
 	}
     
@@ -3092,13 +3069,6 @@ const HTML_CONTENT = `
         document.addEventListener('keydown', handleKeyDown);
         dialog.addEventListener('click', handleOutsideClick);
     }
-    
-    // 应用暗色主题
-    function applyDarkTheme() {
-        document.body.classList.add('dark-theme');
-        window.isDarkTheme = true;
-        logAction('应用暗色主题');
-    }
 
     let currentConfirmHandler = null;
     
@@ -3218,37 +3188,39 @@ const HTML_CONTENT = `
     const sunSvg = '<svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
     const moonSvg = '<svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-star-icon lucide-moon-star"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>';
 
-    // 切换主题
-    function toggleTheme() {
-        window.isDarkTheme = !window.isDarkTheme;
-        if (document.getElementById('save-preference-checkbox').checked) {
-            localStorage.setItem('theme', window.isDarkTheme ? 'dark' : 'light');
-        } else {
-            // 关闭保存偏好时清除本地存储的主题设置
-            localStorage.removeItem('theme');
-        }
-        const themeToggleButton = document.getElementById('theme-toggle');
+    function applyTheme(isDark) {
+        window.isDarkTheme = isDark;
+
+        // 设置或移除 dark class
+        document.body.classList.toggle('dark-theme', isDark);
+
         const themeIcon = document.getElementById('theme-icon');
-
-        // 添加或移除暗色主题类
-        if (window.isDarkTheme) {
-            document.body.classList.add('dark-theme');
-            themeIcon.outerHTML = sunSvg;
-        } else {
-            document.body.classList.remove('dark-theme');
-            
-            themeIcon.outerHTML = moonSvg;
+        if (themeIcon) {
+            themeIcon.innerHTML = isDark ? sunSvg : moonSvg;
         }
 
+        // checkbox 同步
         updateThemeSwitchUI();
 
-        logAction('切换主题', { isDarkTheme: window.isDarkTheme });
+        // 本地存储
+        const savePrefCheckbox = document.getElementById('save-preference-checkbox');
+        if (savePrefCheckbox?.checked) {
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        } else {
+            localStorage.removeItem('theme');
+        }
+
+        logAction('切换主题', { isDarkTheme: isDark });
+    }
+
+    function toggleTheme() {
+        applyTheme(!window.isDarkTheme);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         const themeIcon = document.getElementById('theme-icon');
         if (!themeIcon) return;
-        themeIcon.outerHTML = window.isDarkTheme ? sunSvg : moonSvg;
+        themeIcon.innerHTML = window.isDarkTheme ? sunSvg : moonSvg;
     });
 
     // 返回顶部
