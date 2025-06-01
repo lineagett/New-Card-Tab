@@ -112,24 +112,68 @@ const HTML_CONTENT = `
         
         /* 管理员控制面板样式 */
         .admin-controls {
-            height: 3em; 
-            font-size: 60%;
+            position: relative;
             display: flex;
-            flex-direction: row;       
             align-items: center;
-            gap: 10px; 
+            gap: 1em;
         }
 
         .admin-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             background-color: #43b883;
             color: white;
-            font-size: 13px;
+            font-size: 14px;
             height: 2em; 
             border: none; 
             border-radius: 5px; 
-            cursor: pointer; 
+            cursor: pointer;
             transition: background 0.3s, transform 0.3s; 
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+            position: relative;
+        }
+
+        .admin-btn.padding {
+            padding: 0 10px; 
+        }
+
+        .admin-btn.no-pointer {
+            cursor: default;
+        }
+
+        .admin-btn svg {
+            width: 23px;
+            height: 23px;
+            display: block;
+        }
+
+        .admin-btn::before {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            margin-right: 0.5em;
+            vertical-align: middle;
+            background-size: contain;    /* 或 cover */
+            background-repeat: no-repeat;
+            background-position: center;
+            font-size: inherit; 
+            margin-bottom: 3px;
+        }
+
+        /* 登录状态图标 */
+        .admin-btn[data-state="login"]::before {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10 17 5-5-5-5'/%3E%3Cpath d='M15 12H3'/%3E%3Cpath d='M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4'/%3E%3C/svg%3E");
+        }
+
+        /* 退出状态图标 */
+        .admin-btn[data-state="logout"]::before {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 17 5-5-5-5'/%3E%3Cpath d='M21 12H9'/%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3C/svg%3E");
+        }
+
+        /* 设置状态图标 */
+        .admin-btn[data-state="setting"]::before {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
         }
 
         body.dark-theme .admin-btn {
@@ -137,10 +181,12 @@ const HTML_CONTENT = `
         }
 
         .admin-a {
-            z-index:1000;
+            vertical-align: middle;
         }
 
         .admin-a svg {
+            width: 28px;
+            height: 28px;
             fill: #43b883;
         }
 
@@ -163,7 +209,7 @@ const HTML_CONTENT = `
             top: 40%;
             transform: translateY(-50%);
             align-items: center;
-            gap: 15px;
+            gap: 8px;
             z-index: 900;
         }
         
@@ -322,7 +368,7 @@ const HTML_CONTENT = `
             border: none;
             background-color: #43b883;
             color: white;
-            padding: 0 20px;
+            padding: 10px 15px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -417,7 +463,7 @@ const HTML_CONTENT = `
             padding: 5px 0; 
             display: flex;
             align-items: center; 
-            gap: 8px; /* 给伪元素和文字之间留点间距 */
+            gap: 8px; 
         }
         
         .section-title:before {
@@ -504,10 +550,8 @@ const HTML_CONTENT = `
             cursor: pointer;
             border-left: 5px solid #43b883;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            // position: relative;
             user-select: none;
             display: flex;
-            // align-items:center;
             flex-direction: column;
             position: relative;
         }
@@ -525,8 +569,8 @@ const HTML_CONTENT = `
         }
         
         .card-bottom {
-            min-height: 28px; 
-            line-height: 28px;        
+            min-height: 28px;
+            line-height: 28px
             overflow: hidden;
         }
 
@@ -575,7 +619,7 @@ const HTML_CONTENT = `
 
         body.dark-theme .card-icon {
             background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898;
- background-blend-mode: multiply,multiply;
+            background-blend-mode: multiply,multiply;
         }
 
         #custom-tooltip {
@@ -686,6 +730,16 @@ const HTML_CONTENT = `
             .fixed-elements {
                 position: static;
                 z-index: auto; 
+            }
+
+            .admin-btn svg {
+                width: 28px; 
+                height: 28px;
+            }
+
+            #menu-toggle,
+            .admin-a {
+                display: none;
             }
 
             .content {
@@ -974,6 +1028,12 @@ const HTML_CONTENT = `
 			.admin-a:hover {
 				transform: translateY(-2px); 
 			}
+
+            .admin-btn.no-hover:hover,
+			.admin-a.no-hover:hover {
+				transform: none !important; 
+			}
+            
             .category-button:hover {
                 background-color: #43b883;
                 color: white;
@@ -1016,11 +1076,10 @@ const HTML_CONTENT = `
                 pointer-events: none;
                 opacity: 0;
                 transition: opacity 0.3s;
-				 /* ✅ 新增关键样式 */
 				display: flex;
 				align-items: center;
 				white-space: nowrap;
-				height: auto; /* 允许自适应高度 */
+				height: auto; 
 				pointer-events: none;
             }
 
@@ -1066,7 +1125,7 @@ const HTML_CONTENT = `
                 border-top-color: rgba(151, 151, 151, 1);
             }
 
-            /* 下方提示框和箭头 */
+            /* 下方提示框和箭头 - 可左右偏移 */
             .tooltip-bottom::after {
                 top: 100%;
                 left: 50%;
@@ -1077,10 +1136,20 @@ const HTML_CONTENT = `
                 top: 100%;
                 left: 50%;
                 transform: translateX(-50%);
-                border-bottom-color: #333;
+                border-bottom-color: rgba(0, 0, 0, 0.75);
             }
+
+            /* 下方提示框带偏移 */
+            .tooltip-bottom-offset::after {
+                transform: translateX(calc(-50% + var(--tooltip-offset, 0px)));
+            }
+
+            .tooltip-bottom-left {
+                --tooltip-offset: -60px;
+            }
+
             body.dark-theme .tooltip-bottom:hover::before {
-                border-bottom-color: rgba(151, 151, 151, 1);
+                border-top-color: rgba(151, 151, 151, 1);
             }
 
             /* 左侧提示框和箭头 */
@@ -1120,7 +1189,155 @@ const HTML_CONTENT = `
             }
         }
 
+        .admin-dropdown-wrapper {
+            position: relative; /* 用于下拉菜单定位参考 */
+        }
+
+        .admin-dropdown {
+            position: absolute;
+            top: 100%; 
+            right: 0;
+            margin-top: 5px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 100;
+            min-width: 120px;
+            border-radius: 5px;
+        }
+
+        .admin-dropdown.hidden {
+            display: none;
+        }
+
+        .admin-dropdown button {
+            display: block;
+            width: 100%;
+            margin: 0.3em 0;
+            text-align: left;
+        }
+
+        .preference-toggle {
+            font-size: 13px; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 4px;
+            margin: 6px 0;
+        }
+
+        .preference-toggle span {
+            color: #555;
+        }
+
+        .preference-toggle input{ 
+            cursor: pointer;
+        }
+
+        body.dark-theme .admin-dropdown {
+            background-color: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-theme .preference-toggle span {
+            color: #fff;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 20px;
+            margin-top: 2px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #dddddd;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider.mask {
+            background-color: #43b883;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 2px;
+            background-color: #ffffff;
+            transition: transform 0.4s;
+            border-radius: 50%;
+
+            
+        }
+
+        .slider.mask:before {
+            /* 默认显示太阳图标 */
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>') center / contain no-repeat;
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>') center / contain no-repeat;
+        }
+
+        input:checked + .slider {
+            background-color: #43b883;
+        }
+
+        input:checked + .slider.mask {
+            background-color: #5d7fb9;
+        }
+
+        body.dark-theme input:checked + .slider {
+            background-color: #5d7fb9;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        input:checked + .slider.mask:before {
+            /* 切换时显示月亮图标 */
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>') center / contain no-repeat;
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>') center / contain no-repeat;
+        }
+
     </style>
+    <script>
+        (function () {
+            let isDark;
+            const savePreferences = localStorage.getItem('savePreferences'); // 读取用户保存的偏好设置
+            if (savePreferences === 'true') {
+                const savedTheme = localStorage.getItem('theme'); // 读取用户保存的主题
+                if (savedTheme === 'dark') {
+                    isDark = true;
+                } else if (savedTheme === 'light') {
+                    isDark = false;
+                } else {
+                    // 没有设置，自动判断时间
+                    const hour = new Date().getHours();
+                    isDark = (hour >= 21 || hour < 6);
+                }
+            }
+            window.isDarkTheme = isDark;
+            // 避免闪白：动态写入 <body class="dark-theme">
+            document.write('<body' + (isDark ? ' class="dark-theme"' : '') + '>');
+        })();
+    </script>
 </head>
 
 <body>
@@ -1136,9 +1353,37 @@ const HTML_CONTENT = `
             </a>
             <!-- 管理员控制面板 -->
             <div class="admin-controls">
-                <button id="admin-mode-btn" onclick="toggleAdminMode()" class="admin-btn" style="display: none;">设  置</button>
-                <button id="secret-garden-btn" onclick="toggleSecretGarden()" class="admin-btn">登  录</button>
-                <a target="_blank" class="admin-a has-tooltip tooltip-left" id="original-author" data-tooltip="原作者Github,喜欢请给他点⭐" href="https://github.com/hmhm2022/Card-Tab"><svg stroke-width="0" viewBox="0 0 16 16" class="text-xl svg-icon" height="3em" width="3em" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+                <!-- 下拉包裹器（用于相对定位） -->
+                <div class="admin-dropdown-wrapper">
+                    <!-- 主按钮 -->
+                    <button id="admin-menu-toggle" class="admin-btn no-hover padding">
+                        <span>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="2" rx="1" fill="currentColor"/><rect x="3" y="11" width="18" height="2" rx="1" fill="currentColor"/><rect x="3" y="16" width="18" height="2" rx="1" fill="currentColor"/></svg>
+                        </span>
+                        <span id="menu-toggle">管理菜单</span>
+                    </button>
+
+                    <!-- 下拉菜单 -->
+                    <div id="admin-dropdown" class="admin-dropdown hidden">
+                        <button id="secret-garden-btn" onclick="toggleSecretGarden()" class="admin-btn">登 录</button>
+                        <button id="admin-mode-btn" onclick="toggleAdminMode()" class="admin-btn" data-state="setting">设 置</button>
+                        <div class="preference-toggle">
+                            <span>主题切换</span>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-switch-checkbox">
+                                <span class="slider mask"></span>
+                            </label>
+                        </div>
+                        <div class="preference-toggle has-tooltip tooltip-left" data-tooltip="搜索引擎及主题">
+                            <span>保存偏好</span>
+                            <label class="switch">
+                                <input type="checkbox" id="save-preference-checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <a target="_blank" class="admin-a has-tooltip tooltip-bottom tooltip-bottom-offset tooltip-bottom-left" id="original-author" data-tooltip="原作者Github,喜欢请给他点⭐" href="https://github.com/hmhm2022/Card-Tab"><svg stroke-width="0" viewBox="0 0 16 16" class="text-xl svg-icon" height="3em" width="3em" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a>
             </div>
         </div>
         <div class="search-content">
@@ -1310,62 +1555,200 @@ const HTML_CONTENT = `
 
     <script>
 
-    // 搜索引擎配置
-    const searchEngines = {
-        baidu: "https://www.baidu.com/s?wd=",
-        bing: "https://www.bing.com/search?q=",
-        google: "https://www.google.com/search?q="
-    };
-    
-    let currentEngine = "site";
-    
+    // 全局变量
+    let isAdmin = false;
+    let isLoggedIn = false;
+    let editCardMode = false;
+    let isEditCategoryMode = false;
+    const categories = {};
+
     // 日志记录函数
     function logAction(action, details) {
         const timestamp = new Date().toISOString();
         const logEntry = timestamp + ': ' + action + ' - ' + JSON.stringify(details);
         console.log(logEntry); 
     }
-    
-    // 设置当前搜索引擎
-    function setActiveEngine(engine) {
-        currentEngine = engine;
-        document.getElementById('search-engine-select').value = engine;
-        logAction('设置搜索引擎', { engine });
+
+    const searchEngines = {
+        baidu: "https://www.baidu.com/s?wd=",
+        bing: "https://www.bing.com/search?q=",
+        google: "https://www.google.com/search?q="
+    };
+
+    let currentEngine;
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuToggleBtn = document.getElementById('admin-menu-toggle');
+        const themeSwitchCheckbox = document.getElementById('theme-switch-checkbox');
+        const dropdown = document.getElementById('admin-dropdown');
+        const savePrefCheckbox = document.getElementById('save-preference-checkbox');
+        const searchSelect = document.getElementById('search-engine-select');
+        const searchButton = document.getElementById('search-button');
+        const searchInput = document.getElementById('search-input');
+        const clearSearchButton = document.getElementById('clear-search-button');
+
+        themeSwitchCheckbox.checked = window.isDarkTheme;
+
+        themeSwitchCheckbox.addEventListener('change', () => {
+            const isDark = themeSwitchCheckbox.checked;
+            window.isDarkTheme = isDark;
+
+            if (isDark) {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+
+            // 若用户勾选了保存偏好，则存储
+            if (savePrefCheckbox && savePrefCheckbox.checked) {
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            }
+
+            logAction('切换主题', { isDarkTheme: window.isDarkTheme });
+        });
+
+        // 读取保存偏好设置
+        const savedPref = localStorage.getItem('savePreferences') === 'true';
+        savePrefCheckbox.checked = savedPref;
+
+        // 初始化搜索引擎
+        currentEngine = (savedPref && localStorage.getItem('searchEngine')) || 'site';
+        setActiveEngine(currentEngine);
+
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        // const isTouchDevice = true;
+
+        if (isTouchDevice) {
+            // 移动端：点击切换
+            menuToggleBtn.addEventListener('click', () => {
+                dropdown.classList.toggle('hidden');
+            });
+
+            // 点击外部关闭
+            document.addEventListener('click', (e) => {
+                if (!menuToggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        } else {
+            // 桌面端：鼠标移入显示，移出隐藏
+            menuToggleBtn.addEventListener('mouseenter', () => {
+                dropdown.classList.remove('hidden');
+            });
+
+            menuToggleBtn.addEventListener('mouseleave', (e) => {
+                // 设置一个延迟，防止直接跳过 dropdown 区域
+                setTimeout(() => {
+                    if (!dropdown.matches(':hover') && !menuToggleBtn.matches(':hover')) {
+                        dropdown.classList.add('hidden');
+                    }
+                }, 200);
+            });
+
+            dropdown.addEventListener('mouseleave', () => {
+                dropdown.classList.add('hidden');
+            });
+
+            dropdown.addEventListener('mouseenter', () => {
+                dropdown.classList.remove('hidden');
+            });
+        }
+
+        // 保存偏好切换
+        savePrefCheckbox.addEventListener('change', () => {
+            const enabled = savePrefCheckbox.checked;
+            localStorage.setItem('savePreferences', enabled);
+
+            if (!enabled) {
+                // 不保存时清理相关本地存储
+                localStorage.removeItem('searchEngine');
+                localStorage.removeItem('theme');
+            } else {
+                // 启用保存时立即保存当前值
+                localStorage.setItem('searchEngine', currentEngine);
+                localStorage.setItem('theme', window.isDarkTheme ? 'dark' : 'light');
+
+                if (window.isDarkTheme) {
+                    applyDarkTheme();
+                } else {
+                    document.body.classList.remove('dark-theme');
+                }
+
+                // 保证select显示正确搜索引擎
+                setActiveEngine(currentEngine);
+            }
+
+            logAction('切换保存偏好', { enabled });
+        });
+
+        // 监听搜索引擎下拉选择变化
+        if (searchSelect) {
+            searchSelect.value = currentEngine;
+            searchSelect.addEventListener('change', function () {
+                setActiveEngine(this.value);
+            });
+        }
+
+        // 搜索按钮点击事件
+        if (searchButton) {
+            searchButton.addEventListener('click', () => {
+                const query = searchInput.value.trim();
+                if (query) {
+                    if (currentEngine === 'site') {
+                        logAction('执行本站搜索', { query });
+                        searchLinks(query); 
+                    } else {
+                        logAction('跳转外部搜索', { engine: currentEngine, query });
+                        window.open(searchEngines[currentEngine] + encodeURIComponent(query), '_blank');
+                    }
+                }
+            });
+        }
+
+        // 清空搜索按钮
+        if (clearSearchButton) {
+            clearSearchButton.addEventListener('click', () => {
+                searchInput.value = '';
+                loadSections(); 
+            });
+        }
+
+        // 搜索输入框回车事件
+        if (searchInput) {
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    if (searchButton) searchButton.click();
+                }
+            });
+        }
+    });
+
+    function updateThemeSwitchUI() {
+        const themeSwitchCheckbox = document.getElementById('theme-switch-checkbox');
+        if (themeSwitchCheckbox) {
+            themeSwitchCheckbox.checked = window.isDarkTheme;
+        }
     }
 
-    // 搜索引擎选择框变更事件
-    document.getElementById('search-engine-select').addEventListener('change', function() {
-        setActiveEngine(this.value);
-    });
-
-    // 搜索按钮点击事件
-    document.getElementById('search-button').addEventListener('click', () => {
-        const query = document.getElementById('search-input').value;
-        if (query) {
-            if (currentEngine === 'site') {
-				logAction('执行本站搜索', { query });
-				searchLinks(query); // 本站搜索
-			} else {
-				logAction('跳转外部搜索', { engine: currentEngine, query });
-				window.open(searchEngines[currentEngine] + encodeURIComponent(query), '_blank');
-			}
+    /**
+     * 设置当前搜索引擎
+     * @param {string} engine 
+     */
+    function setActiveEngine(engine) {
+        if (!searchEngines.hasOwnProperty(engine) && engine !== 'site') {
+            engine = 'site'; 
         }
-    });
+        currentEngine = engine;
 
-	document.getElementById('clear-search-button').addEventListener('click', () => {
-		document.getElementById('search-input').value = '';
-		loadSections(); 
-	});
-
-    // 搜索输入框回车事件
-    document.getElementById('search-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            document.getElementById('search-button').click();
+        const savePrefCheckbox = document.getElementById('save-preference-checkbox');
+        if (savePrefCheckbox && savePrefCheckbox.checked) {
+            localStorage.setItem('searchEngine', engine);
         }
-    });
-    
-    // 初始化搜索引擎
-    setActiveEngine(currentEngine);
+
+        const select = document.getElementById('search-engine-select');
+        if (select) select.value = engine;
+
+        logAction('设置搜索引擎', { engine });
+    }
 
 	function setSearchDisabledState(disabled) {
 		const controls = document.querySelectorAll(
@@ -1384,14 +1767,6 @@ const HTML_CONTENT = `
 			}
 		});
 	}
-    
-    // 全局变量
-    let isAdmin = false;
-    let isLoggedIn = false;
-    let editCardMode = false;
-    let isEditCategoryMode = false;
-    let isDarkTheme = false;
-    const categories = {};
     
     // 添加新分类
     async function addCategory() {
@@ -1417,24 +1792,20 @@ const HTML_CONTENT = `
     async function editCategoryName(oldName) {
         if (!await validateToken()) return;
     
-        // const newName = prompt('请输入新的分类名称');
         const newName = await showCategoryDialog('请输入新的分类名称', oldName);
         if (!newName || newName === oldName) return;
     
         if (categories[newName]) {
-            // alert("该名称已存在，请重新命名");
             customAlert('该名称已存在，请重新命名')
             return;
         }
     
-        // 1. 重命名分类对象
         categories[newName] = categories[oldName];
         categories[newName].forEach(item => {
             item.category = newName; 
         });
         delete categories[oldName];
     
-        // 3. 保存并刷新
         renderCategories();
         renderCategoryButtons();
         updateCategorySelect();
@@ -1884,9 +2255,10 @@ const HTML_CONTENT = `
         const secretGardenBtn = document.getElementById('secret-garden-btn');
         const settingPanel = document.querySelector('.setting-panel');
         adminBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
+        secretGardenBtn.dataset.state = isLoggedIn ? 'logout' : 'login';
         secretGardenBtn.textContent = isLoggedIn ? "退  出" : "登  录";
         secretGardenBtn.style.display = 'inline-block';
-		let searchDisabled = false;
+        let searchDisabled = false;
     
         if (isAdmin) {
             adminBtn.textContent = "离开设置";
@@ -1901,8 +2273,8 @@ const HTML_CONTENT = `
             adminBtn.style.display = 'none';
             settingPanel.style.display = 'none';
         }
-		setSearchDisabledState(searchDisabled);
-    
+        setSearchDisabledState(searchDisabled);
+        
         logAction('更新UI状态', { isAdmin, isLoggedIn });
     }
     
@@ -2533,7 +2905,7 @@ const HTML_CONTENT = `
 		container.style.transition = 'opacity 0.3s';
 		container.style.opacity = '1';
 
-		if (isDarkTheme) {
+		if (window.isDarkTheme) {
 			applyDarkTheme();
 		}
 
@@ -2714,7 +3086,7 @@ const HTML_CONTENT = `
     // 应用暗色主题
     function applyDarkTheme() {
         document.body.classList.add('dark-theme');
-        isDarkTheme = true;
+        window.isDarkTheme = true;
         logAction('应用暗色主题');
     }
 
@@ -2833,43 +3205,41 @@ const HTML_CONTENT = `
     }
     
     
+    const sunSvg = '<svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
+    const moonSvg = '<svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-star-icon lucide-moon-star"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>';
+
     // 切换主题
     function toggleTheme() {
-        isDarkTheme = !isDarkTheme;
+        window.isDarkTheme = !window.isDarkTheme;
+        if (document.getElementById('save-preference-checkbox').checked) {
+            localStorage.setItem('theme', window.isDarkTheme ? 'dark' : 'light');
+        } else {
+            // 关闭保存偏好时清除本地存储的主题设置
+            localStorage.removeItem('theme');
+        }
         const themeToggleButton = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
 
         // 添加或移除暗色主题类
-        if (isDarkTheme) {
+        if (window.isDarkTheme) {
             document.body.classList.add('dark-theme');
-            const newSvg = '<svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
-            themeIcon.outerHTML = newSvg;
+            themeIcon.outerHTML = sunSvg;
         } else {
             document.body.classList.remove('dark-theme');
-            const originalSvg = '<svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-star-icon lucide-moon-star"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>';
-            themeIcon.outerHTML = originalSvg;
+            
+            themeIcon.outerHTML = moonSvg;
         }
 
-        logAction('切换主题', { isDarkTheme });
+        updateThemeSwitchUI();
+
+        logAction('切换主题', { isDarkTheme: window.isDarkTheme });
     }
 
-    // 根据时间自动切换主题
-    function autoToggleTheme() {
-        const currentHour = new Date().getHours();
-
-        // 判断时间段 - 暗黑模式时间为晚上9点到早上6点
-        if (currentHour >= 21 || currentHour < 6) {
-            if (!isDarkTheme) {
-                toggleTheme(); 
-            }
-        } else {
-            if (isDarkTheme) {
-                toggleTheme(); 
-            }
-        }
-    }
-    // 立即调用一次以设置初始状态
-    autoToggleTheme();
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeIcon = document.getElementById('theme-icon');
+        if (!themeIcon) return;
+        themeIcon.outerHTML = window.isDarkTheme ? sunSvg : moonSvg;
+    });
 
     // 返回顶部
     function scrollToTop() {
@@ -3264,449 +3634,441 @@ const HTML_CONTENT = `
 `;
 
 function base64UrlEncode(str) {
-  return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+	return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 function base64UrlEncodeUint8(arr) {
-  const str = String.fromCharCode(...arr);
-  return base64UrlEncode(str);
+	const str = String.fromCharCode(...arr);
+	return base64UrlEncode(str);
 }
 
 function base64UrlDecode(str) {
-  str = str.replace(/-/g, "+").replace(/_/g, "/");
-  while (str.length % 4) str += "=";
-  return atob(str);
+	str = str.replace(/-/g, '+').replace(/_/g, '/');
+	while (str.length % 4) str += '=';
+	return atob(str);
 }
 
 async function createJWT(payload, secret) {
-  const encoder = new TextEncoder();
-  const header = {
-    alg: "HS256",
-    typ: "JWT",
-  };
+	const encoder = new TextEncoder();
+	const header = {
+		alg: 'HS256',
+		typ: 'JWT',
+	};
 
-  const headerEncoded = base64UrlEncode(JSON.stringify(header));
-  const payloadEncoded = base64UrlEncode(JSON.stringify(payload));
-  const toSign = encoder.encode(`${headerEncoded}.${payloadEncoded}`);
+	const headerEncoded = base64UrlEncode(JSON.stringify(header));
+	const payloadEncoded = base64UrlEncode(JSON.stringify(payload));
+	const toSign = encoder.encode(`${headerEncoded}.${payloadEncoded}`);
 
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(secret),
-    {
-      name: "HMAC",
-      hash: "SHA-256",
-    },
-    false,
-    ["sign"]
-  );
+	const key = await crypto.subtle.importKey(
+		'raw',
+		encoder.encode(secret),
+		{
+			name: 'HMAC',
+			hash: 'SHA-256',
+		},
+		false,
+		['sign']
+	);
 
-  const signature = await crypto.subtle.sign("HMAC", key, toSign);
-  const signatureEncoded = base64UrlEncodeUint8(new Uint8Array(signature));
+	const signature = await crypto.subtle.sign('HMAC', key, toSign);
+	const signatureEncoded = base64UrlEncodeUint8(new Uint8Array(signature));
 
-  return `${headerEncoded}.${payloadEncoded}.${signatureEncoded}`;
+	return `${headerEncoded}.${payloadEncoded}.${signatureEncoded}`;
 }
 
 async function validateJWT(token, secret) {
-  const encoder = new TextEncoder();
-  const parts = token.split(".");
-  if (parts.length !== 3) return null;
+	const encoder = new TextEncoder();
+	const parts = token.split('.');
+	if (parts.length !== 3) return null;
 
-  const [headerEncoded, payloadEncoded, signature] = parts;
-  const data = encoder.encode(`${headerEncoded}.${payloadEncoded}`);
+	const [headerEncoded, payloadEncoded, signature] = parts;
+	const data = encoder.encode(`${headerEncoded}.${payloadEncoded}`);
 
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(secret),
-    {
-      name: "HMAC",
-      hash: "SHA-256",
-    },
-    false,
-    ["sign"]
-  );
+	const key = await crypto.subtle.importKey(
+		'raw',
+		encoder.encode(secret),
+		{
+			name: 'HMAC',
+			hash: 'SHA-256',
+		},
+		false,
+		['sign']
+	);
 
-  const expectedSigBuffer = await crypto.subtle.sign("HMAC", key, data);
-  const expectedSig = base64UrlEncodeUint8(new Uint8Array(expectedSigBuffer));
+	const expectedSigBuffer = await crypto.subtle.sign('HMAC', key, data);
+	const expectedSig = base64UrlEncodeUint8(new Uint8Array(expectedSigBuffer));
 
-  if (signature !== expectedSig) return null;
+	if (signature !== expectedSig) return null;
 
-  const payloadStr = base64UrlDecode(payloadEncoded);
-  return JSON.parse(payloadStr);
+	const payloadStr = base64UrlDecode(payloadEncoded);
+	return JSON.parse(payloadStr);
 }
 
 // 服务端 token 验证
 async function validateServerToken(authHeader, env) {
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return {
-      isValid: false,
-      status: 401,
-      response: {
-        error: "Unauthorized",
-        message: "未登录或登录已过期",
-      },
-    };
-  }
+	if (!authHeader || !authHeader.startsWith('Bearer ')) {
+		return {
+			isValid: false,
+			status: 401,
+			response: {
+				error: 'Unauthorized',
+				message: '未登录或登录已过期',
+			},
+		};
+	}
 
-  const token = authHeader.slice(7);
-  const payload = await validateJWT(token, env.ADMIN_PASSWORD);
-  if (!payload) {
-    return {
-      isValid: false,
-      status: 401,
-      response: {
-        error: "Invalid token",
-        tokenInvalid: true,
-        message: "登录状态无效，请重新登录",
-      },
-    };
-  }
+	const token = authHeader.slice(7);
+	const payload = await validateJWT(token, env.ADMIN_PASSWORD);
+	if (!payload) {
+		return {
+			isValid: false,
+			status: 401,
+			response: {
+				error: 'Invalid token',
+				tokenInvalid: true,
+				message: '登录状态无效，请重新登录',
+			},
+		};
+	}
 
-  const now = Math.floor(Date.now() / 1000);
-  if (payload.exp < now) {
-    return {
-      isValid: false,
-      status: 401,
-      response: {
-        error: "Token expired",
-        tokenExpired: true,
-        message: "登录已过期，请重新登录",
-      },
-    };
-  }
+	const now = Math.floor(Date.now() / 1000);
+	if (payload.exp < now) {
+		return {
+			isValid: false,
+			status: 401,
+			response: {
+				error: 'Token expired',
+				tokenExpired: true,
+				message: '登录已过期，请重新登录',
+			},
+		};
+	}
 
-  return {
-    isValid: true,
-    payload,
-  };
+	return {
+		isValid: true,
+		payload,
+	};
 }
 
 export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
+	async fetch(request, env) {
+		const url = new URL(request.url);
 
-    if (url.pathname === "/") {
-      return new Response(HTML_CONTENT, {
-        headers: {
-          "Content-Type": "text/html",
-        },
-      });
-    }
+		if (url.pathname === '/') {
+			return new Response(HTML_CONTENT, {
+				headers: {
+					'Content-Type': 'text/html',
+				},
+			});
+		}
 
-    if (url.pathname === "/api/validateToken") {
-      const authToken = request.headers.get("Authorization");
-      const validation = await validateServerToken(authToken, env);
+		if (url.pathname === '/api/validateToken') {
+			const authToken = request.headers.get('Authorization');
+			const validation = await validateServerToken(authToken, env);
 
-      if (!validation.isValid) {
-        return new Response(JSON.stringify(validation.response), {
-          status: validation.status,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      }
+			if (!validation.isValid) {
+				return new Response(JSON.stringify(validation.response), {
+					status: validation.status,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+			}
 
-      return new Response(
-        JSON.stringify({
-          valid: true,
-        }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    }
+			return new Response(
+				JSON.stringify({
+					valid: true,
+				}),
+				{
+					status: 200,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+		}
 
-    if (url.pathname === "/api/getLinks") {
-      const userId = url.searchParams.get("userId");
-      const authToken = request.headers.get("Authorization");
-      const data = await env.CARD_ORDER.get(userId);
+		if (url.pathname === '/api/getLinks') {
+			const userId = url.searchParams.get('userId');
+			const authToken = request.headers.get('Authorization');
+			const data = await env.CARD_ORDER.get(userId);
 
-      if (data) {
-        const parsedData = JSON.parse(data);
+			if (data) {
+				const parsedData = JSON.parse(data);
 
-        // 如果提供 token，尝试验证
-        if (authToken) {
-          const validation = await validateServerToken(authToken, env);
-          if (!validation.isValid) {
-            return new Response(JSON.stringify(validation.response), {
-              status: validation.status,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-          }
+				// 如果提供 token，尝试验证
+				if (authToken) {
+					const validation = await validateServerToken(authToken, env);
+					if (!validation.isValid) {
+						return new Response(JSON.stringify(validation.response), {
+							status: validation.status,
+							headers: {
+								'Content-Type': 'application/json',
+							},
+						});
+					}
 
-          // token 合法，返回完整数据
-          return new Response(JSON.stringify(parsedData), {
-            status: 200,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-        }
+					// token 合法，返回完整数据
+					return new Response(JSON.stringify(parsedData), {
+						status: 200,
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					});
+				}
 
-        // 未提供 token，过滤掉私有链接
-        const filteredCategories = {};
-        for (const category in parsedData.categories) {
-          filteredCategories[category] = parsedData.categories[category].filter(
-            (link) => !link.isPrivate
-          );
-        }
+				// 未提供 token，过滤掉私有链接
+				const filteredCategories = {};
+				for (const category in parsedData.categories) {
+					filteredCategories[category] = parsedData.categories[category].filter((link) => !link.isPrivate);
+				}
 
-        return new Response(
-          JSON.stringify({
-            categories: filteredCategories,
-          }),
-          {
-            status: 200,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      }
+				return new Response(
+					JSON.stringify({
+						categories: filteredCategories,
+					}),
+					{
+						status: 200,
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				);
+			}
 
-      return new Response(
-        JSON.stringify({
-          categories: {},
-        }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    }
+			return new Response(
+				JSON.stringify({
+					categories: {},
+				}),
+				{
+					status: 200,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+		}
 
-    if (url.pathname === "/api/saveOrder" && request.method === "POST") {
-      const authToken = request.headers.get("Authorization");
-      const validation = await validateServerToken(authToken, env);
+		if (url.pathname === '/api/saveOrder' && request.method === 'POST') {
+			const authToken = request.headers.get('Authorization');
+			const validation = await validateServerToken(authToken, env);
 
-      if (!validation.isValid) {
-        return new Response(JSON.stringify(validation.response), {
-          status: validation.status,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      }
+			if (!validation.isValid) {
+				return new Response(JSON.stringify(validation.response), {
+					status: validation.status,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+			}
 
-      const { userId, links, categories } = await request.json();
-      await env.CARD_ORDER.put(
-        userId,
-        JSON.stringify({
-          links,
-          categories,
-        })
-      );
-      return new Response(
-        JSON.stringify({
-          success: true,
-          message: "保存成功",
-        }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    }
+			const { userId, links, categories } = await request.json();
+			await env.CARD_ORDER.put(
+				userId,
+				JSON.stringify({
+					links,
+					categories,
+				})
+			);
+			return new Response(
+				JSON.stringify({
+					success: true,
+					message: '保存成功',
+				}),
+				{
+					status: 200,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+		}
 
-    if (url.pathname === "/api/login" && request.method === "POST") {
-      try {
-        const { password } = await request.json();
-        if (password !== env.ADMIN_PASSWORD) {
-          return new Response(
-            JSON.stringify({
-              valid: false,
-            }),
-            {
-              status: 403,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        }
+		if (url.pathname === '/api/login' && request.method === 'POST') {
+			try {
+				const { password } = await request.json();
+				if (password !== env.ADMIN_PASSWORD) {
+					return new Response(
+						JSON.stringify({
+							valid: false,
+						}),
+						{
+							status: 403,
+							headers: {
+								'Content-Type': 'application/json',
+							},
+						}
+					);
+				}
 
-        const now = Math.floor(Date.now() / 1000);
-        const payload = {
-          iat: now,
-          exp: now + 15 * 60, // 15分钟有效
-          role: "admin",
-        };
+				const now = Math.floor(Date.now() / 1000);
+				const payload = {
+					iat: now,
+					exp: now + 15 * 60, // 15分钟有效
+					role: 'admin',
+				};
 
-        const token = await createJWT(payload, env.ADMIN_PASSWORD);
+				const token = await createJWT(payload, env.ADMIN_PASSWORD);
 
-        return new Response(
-          JSON.stringify({
-            valid: true,
-            token: `Bearer ${token}`,
-          }),
-          {
-            status: 200,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      } catch (error) {
-        return new Response(
-          JSON.stringify({
-            valid: false,
-            error: error.message,
-          }),
-          {
-            status: 500,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      }
-    }
+				return new Response(
+					JSON.stringify({
+						valid: true,
+						token: `Bearer ${token}`,
+					}),
+					{
+						status: 200,
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				);
+			} catch (error) {
+				return new Response(
+					JSON.stringify({
+						valid: false,
+						error: error.message,
+					}),
+					{
+						status: 500,
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				);
+			}
+		}
 
-    if (url.pathname === "/api/backupData" && request.method === "POST") {
-      const { sourceUserId } = await request.json();
-      const result = await this.backupData(env, sourceUserId);
-      return new Response(JSON.stringify(result), {
-        status: result.success ? 200 : 404,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    }
+		if (url.pathname === '/api/backupData' && request.method === 'POST') {
+			const { sourceUserId } = await request.json();
+			const result = await this.backupData(env, sourceUserId);
+			return new Response(JSON.stringify(result), {
+				status: result.success ? 200 : 404,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+		}
 
-    if (url.pathname === "/api/exportData" && request.method === "POST") {
-      const authToken = request.headers.get("Authorization");
+		if (url.pathname === '/api/exportData' && request.method === 'POST') {
+			const authToken = request.headers.get('Authorization');
 
-      // 验证 token 是否有效
-      const validationResult = await validateServerToken(authToken, env);
-      if (!validationResult.isValid) {
-        return new Response(
-          JSON.stringify({
-            success: false,
-            message: "Unauthorized",
-          }),
-          {
-            status: 401,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      }
+			// 验证 token 是否有效
+			const validationResult = await validateServerToken(authToken, env);
+			if (!validationResult.isValid) {
+				return new Response(
+					JSON.stringify({
+						success: false,
+						message: 'Unauthorized',
+					}),
+					{
+						status: 401,
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				);
+			}
 
-      try {
-        // 获取当前用户的数据
-        const storedData = await env.CARD_ORDER.get("testUser");
-        const parsedData = storedData
-          ? JSON.parse(storedData)
-          : {
-              categories: {},
-            };
+			try {
+				// 获取当前用户的数据
+				const storedData = await env.CARD_ORDER.get('testUser');
+				const parsedData = storedData
+					? JSON.parse(storedData)
+					: {
+							categories: {},
+					  };
 
-        return new Response(JSON.stringify(parsedData, null, 2), {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-            "Content-Disposition": 'attachment; filename="links_export.json"',
-          },
-        });
-      } catch (error) {
-        return new Response(
-          JSON.stringify({
-            success: false,
-            message: "读取数据失败",
-          }),
-          {
-            status: 500,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      }
-    }
+				return new Response(JSON.stringify(parsedData, null, 2), {
+					status: 200,
+					headers: {
+						'Content-Type': 'application/json',
+						'Content-Disposition': 'attachment; filename="links_export.json"',
+					},
+				});
+			} catch (error) {
+				return new Response(
+					JSON.stringify({
+						success: false,
+						message: '读取数据失败',
+					}),
+					{
+						status: 500,
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				);
+			}
+		}
 
-    return new Response("Not Found", {
-      status: 404,
-    });
-  },
+		return new Response('Not Found', {
+			status: 404,
+		});
+	},
 
-  async backupData(env, sourceUserId) {
-    const MAX_BACKUPS = 10;
-    const sourceData = await env.CARD_ORDER.get(sourceUserId);
+	async backupData(env, sourceUserId) {
+		const MAX_BACKUPS = 10;
+		const sourceData = await env.CARD_ORDER.get(sourceUserId);
 
-    if (sourceData) {
-      try {
-        const currentDate = new Date()
-          .toLocaleString("zh-CN", {
-            timeZone: "Asia/Shanghai",
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: false,
-          })
-          .replace(/\//g, "-");
+		if (sourceData) {
+			try {
+				const currentDate = new Date()
+					.toLocaleString('zh-CN', {
+						timeZone: 'Asia/Shanghai',
+						year: 'numeric',
+						month: '2-digit',
+						day: '2-digit',
+						hour: '2-digit',
+						minute: '2-digit',
+						second: '2-digit',
+						hour12: false,
+					})
+					.replace(/\//g, '-');
 
-        const backupId = `backup_${currentDate}`;
+				const backupId = `backup_${currentDate}`;
 
-        const backups = await env.CARD_ORDER.list({
-          prefix: "backup_",
-        });
-        const backupKeys = backups.keys
-          .map((key) => key.name)
-          .sort((a, b) => {
-            const timeA = new Date(
-              a.split("_")[1].replace(/-/g, "/")
-            ).getTime();
-            const timeB = new Date(
-              b.split("_")[1].replace(/-/g, "/")
-            ).getTime();
-            return timeB - timeA; // 降序排序，最新的在前
-          });
+				const backups = await env.CARD_ORDER.list({
+					prefix: 'backup_',
+				});
+				const backupKeys = backups.keys
+					.map((key) => key.name)
+					.sort((a, b) => {
+						const timeA = new Date(a.split('_')[1].replace(/-/g, '/')).getTime();
+						const timeB = new Date(b.split('_')[1].replace(/-/g, '/')).getTime();
+						return timeB - timeA; // 降序排序，最新的在前
+					});
 
-        await env.CARD_ORDER.put(backupId, sourceData);
+				await env.CARD_ORDER.put(backupId, sourceData);
 
-        const allBackups = [...backupKeys, backupId].sort((a, b) => {
-          const timeA = new Date(a.split("_")[1].replace(/-/g, "/")).getTime();
-          const timeB = new Date(b.split("_")[1].replace(/-/g, "/")).getTime();
-          return timeB - timeA;
-        });
+				const allBackups = [...backupKeys, backupId].sort((a, b) => {
+					const timeA = new Date(a.split('_')[1].replace(/-/g, '/')).getTime();
+					const timeB = new Date(b.split('_')[1].replace(/-/g, '/')).getTime();
+					return timeB - timeA;
+				});
 
-        const backupsToDelete = allBackups.slice(MAX_BACKUPS);
+				const backupsToDelete = allBackups.slice(MAX_BACKUPS);
 
-        if (backupsToDelete.length > 0) {
-          await Promise.all(
-            backupsToDelete.map((key) => env.CARD_ORDER.delete(key))
-          );
-        }
+				if (backupsToDelete.length > 0) {
+					await Promise.all(backupsToDelete.map((key) => env.CARD_ORDER.delete(key)));
+				}
 
-        return {
-          success: true,
-          backupId,
-          remainingBackups: MAX_BACKUPS,
-          deletedCount: backupsToDelete.length,
-        };
-      } catch (error) {
-        return {
-          success: false,
-          error: "Backup operation failed",
-          details: error.message,
-        };
-      }
-    }
-    return {
-      success: false,
-      error: "Source data not found",
-    };
-  },
+				return {
+					success: true,
+					backupId,
+					remainingBackups: MAX_BACKUPS,
+					deletedCount: backupsToDelete.length,
+				};
+			} catch (error) {
+				return {
+					success: false,
+					error: 'Backup operation failed',
+					details: error.message,
+				};
+			}
+		}
+		return {
+			success: false,
+			error: 'Source data not found',
+		};
+	},
 };
