@@ -11,7 +11,7 @@ const HTML_CONTENT = `
         body {
             display: flex;
             flex-direction: column;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f8f6f2;
@@ -3939,38 +3939,46 @@ export default {
 		}
 
 		if (url.pathname === '/api/backupData' && request.method === 'POST') {
-			const { sourceUserId } = await request.json();
-			const result = await this.backupData(env, sourceUserId);
-			return new Response(JSON.stringify(result), {
-				status: result.success ? 200 : 404,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-		}
+            const authToken = request.headers.get('Authorization');
+            const validation = await validateServerToken(authToken, env);
+
+            if (!validation.isValid) {
+                return new Response(JSON.stringify(validation.response), {
+                    status: validation.status,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+
+            try {
+                const { sourceUserId } = await request.json();
+                const result = await this.backupData(env, sourceUserId);
+                return new Response(JSON.stringify(result), {
+                status: result.success ? 200 : 404,
+                headers: { 'Content-Type': 'application/json' }
+                });
+            } catch (error) {
+                return new Response(JSON.stringify({
+                    success: false,
+                    message: '备份操作失败'
+                }), {
+                    status: 500,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+        }
 
 		if (url.pathname === '/api/exportData' && request.method === 'POST') {
 			const authToken = request.headers.get('Authorization');
+            const validation = await validateServerToken(authToken, env);
 
-			// 验证 token 是否有效
-			const validationResult = await validateServerToken(authToken, env);
-			if (!validationResult.isValid) {
-				return new Response(
-					JSON.stringify({
-						success: false,
-						message: 'Unauthorized',
-					}),
-					{
-						status: 401,
-						headers: {
-							'Content-Type': 'application/json',
-						},
-					}
-				);
-			}
+            if (!validation.isValid) {
+                return new Response(JSON.stringify(validation.response), {
+                    status: validation.status,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
 
 			try {
-				// 获取当前用户的数据
 				const storedData = await env.CARD_ORDER.get('testUser');
 				const parsedData = storedData
 					? JSON.parse(storedData)
