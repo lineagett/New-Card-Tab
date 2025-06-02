@@ -135,7 +135,7 @@ const HTML_CONTENT = `
         }
 
         .admin-btn.padding {
-            padding: 0 10px; 
+            padding-right: 10px; 
         }
 
         .admin-btn.no-pointer {
@@ -148,33 +148,6 @@ const HTML_CONTENT = `
             display: block;
         }
 
-        .admin-btn::before {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            margin-right: 0.5em;
-            vertical-align: middle;
-            background-size: contain;    /* 或 cover */
-            background-repeat: no-repeat;
-            background-position: center;
-            font-size: inherit; 
-            margin-bottom: 3px;
-        }
-
-        /* 登录状态图标 */
-        .admin-btn[data-state="login"]::before {
-        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10 17 5-5-5-5'/%3E%3Cpath d='M15 12H3'/%3E%3Cpath d='M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4'/%3E%3C/svg%3E");
-        }
-
-        /* 退出状态图标 */
-        .admin-btn[data-state="logout"]::before {
-        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 17 5-5-5-5'/%3E%3Cpath d='M21 12H9'/%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3C/svg%3E");
-        }
-
-        /* 设置状态图标 */
-        .admin-btn[data-state="setting"]::before {
-        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
-        }
 
         body.dark-theme .admin-btn {
             background-color: #5d7fb9;
@@ -192,6 +165,167 @@ const HTML_CONTENT = `
 
         body.dark-theme .admin-a svg {
             fill: #5d7fb9;
+        }
+
+        .admin-dropdown-wrapper {
+            position: relative; /* 用于下拉菜单定位参考 */
+        }
+
+        .admin-dropdown {
+            position: absolute;
+            top: 100%; 
+            right: 0;
+            margin-top: 5px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 100;
+            min-width: 120px;
+            border-radius: 5px;
+        }
+
+        .admin-dropdown.hidden {
+            display: none;
+        }
+
+        .admin-dropdown button {
+            display: block;
+            width: 100%;
+            margin: 0.3em 0;
+            text-align: left;
+        }
+
+        .admin-dropdown button::before {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            margin-right: 0.5em;
+            vertical-align: middle;
+            background-size: contain;    /* 或 cover */
+            background-repeat: no-repeat;
+            background-position: center;
+            font-size: inherit; 
+            margin-bottom: 3px;
+        }
+
+        /* 登录状态图标 */
+        .admin-dropdown button[data-state="login"]::before {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10 17 5-5-5-5'/%3E%3Cpath d='M15 12H3'/%3E%3Cpath d='M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4'/%3E%3C/svg%3E");
+        }
+
+        /* 退出状态图标 */
+        .admin-dropdown button[data-state="logout"]::before {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 17 5-5-5-5'/%3E%3Cpath d='M21 12H9'/%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3C/svg%3E");
+        }
+
+        /* 设置状态图标 */
+        .admin-dropdown button[data-state="setting"]::before {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+        }
+
+        .preference-toggle {
+            font-size: 13px; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 4px;
+            margin: 6px 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e0e0e0; 
+            margin: 6px 0;
+        }
+
+        .preference-toggle span {
+            color: #555;
+        }
+
+        .preference-toggle input{ 
+            cursor: pointer;
+        }
+
+        body.dark-theme .admin-dropdown {
+            background-color: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-theme .preference-toggle span {
+            color: #fff;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 20px;
+            margin-top: 2px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #dddddd;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider.mask {
+            background-color: #43b883;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 2px;
+            background-color: #ffffff;
+            transition: transform 0.4s;
+            border-radius: 50%;
+
+            
+        }
+
+        .slider.mask:before {
+            /* 默认显示太阳图标 */
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>') center / contain no-repeat;
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>') center / contain no-repeat;
+        }
+
+        input:checked + .slider {
+            background-color: #43b883;
+        }
+
+        input:checked + .slider.mask {
+            background-color: #5d7fb9;
+        }
+
+        body.dark-theme input:checked + .slider {
+            background-color: #5d7fb9;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        input:checked + .slider.mask:before {
+            /* 切换时显示月亮图标 */
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>') center / contain no-repeat;
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>') center / contain no-repeat;
         }
 
         .add-card-btn { order: 1; }
@@ -1160,7 +1294,7 @@ const HTML_CONTENT = `
             }
 
             body.dark-theme .tooltip-bottom:hover::before {
-                border-top-color: rgba(151, 151, 151, 1);
+                border-bottom-color: rgba(151, 151, 151, 1);
             }
 
             /* 左侧提示框和箭头 */
@@ -1198,133 +1332,6 @@ const HTML_CONTENT = `
             body.dark-theme .tooltip-right:hover::before {
                 border-right-color: rgba(151, 151, 151, 1);
             }
-        }
-
-        .admin-dropdown-wrapper {
-            position: relative; /* 用于下拉菜单定位参考 */
-        }
-
-        .admin-dropdown {
-            position: absolute;
-            top: 100%; 
-            right: 0;
-            margin-top: 5px;
-            background-color: white;
-            border: 1px solid #ccc;
-            padding: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 100;
-            min-width: 120px;
-            border-radius: 5px;
-        }
-
-        .admin-dropdown.hidden {
-            display: none;
-        }
-
-        .admin-dropdown button {
-            display: block;
-            width: 100%;
-            margin: 0.3em 0;
-            text-align: left;
-        }
-
-        .preference-toggle {
-            font-size: 13px; 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-left: 4px;
-            margin: 6px 0;
-        }
-
-        .preference-toggle span {
-            color: #555;
-        }
-
-        .preference-toggle input{ 
-            cursor: pointer;
-        }
-
-        body.dark-theme .admin-dropdown {
-            background-color: #2d3748;
-            border-color: #4a5568;
-        }
-
-        body.dark-theme .preference-toggle span {
-            color: #fff;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 20px;
-            margin-top: 2px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #dddddd;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider.mask {
-            background-color: #43b883;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 2px;
-            background-color: #ffffff;
-            transition: transform 0.4s;
-            border-radius: 50%;
-
-            
-        }
-
-        .slider.mask:before {
-            /* 默认显示太阳图标 */
-            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>') center / contain no-repeat;
-            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>') center / contain no-repeat;
-        }
-
-        input:checked + .slider {
-            background-color: #43b883;
-        }
-
-        input:checked + .slider.mask {
-            background-color: #5d7fb9;
-        }
-
-        body.dark-theme input:checked + .slider {
-            background-color: #5d7fb9;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        input:checked + .slider.mask:before {
-            /* 切换时显示月亮图标 */
-            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>') center / contain no-repeat;
-            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>') center / contain no-repeat;
         }
 
     </style>
@@ -1376,8 +1383,8 @@ const HTML_CONTENT = `
 
                     <!-- 下拉菜单 -->
                     <div id="admin-dropdown" class="admin-dropdown hidden">
-                        <button id="secret-garden-btn" onclick="toggleSecretGarden()" class="admin-btn">登 录</button>
                         <button id="admin-mode-btn" onclick="toggleAdminMode()" class="admin-btn" data-state="setting">编辑模式</button>
+                        <div class="divider" id="admin-mode-btn-divider"></div>
                         <div class="preference-toggle">
                             <span>主题切换</span>
                             <label class="switch">
@@ -1386,12 +1393,14 @@ const HTML_CONTENT = `
                             </label>
                         </div>
                         <div class="preference-toggle has-tooltip tooltip-left" data-tooltip="搜索引擎及主题">
-                            <span>保存偏好</span>
+                            <span>保存设置</span>
                             <label class="switch">
                                 <input type="checkbox" id="save-preference-checkbox">
                                 <span class="slider"></span>
                             </label>
                         </div>
+                        <div class="divider"></div>
+                        <button id="secret-garden-btn" onclick="toggleLogin()" class="admin-btn">登 录</button>
                     </div>
                 </div>
                 <a target="_blank" class="admin-a has-tooltip tooltip-bottom tooltip-bottom-offset tooltip-bottom-left" id="original-author" data-tooltip="原作者Github,喜欢请给他点⭐" href="https://github.com/hmhm2022/Card-Tab"><svg stroke-width="0" viewBox="0 0 16 16" class="text-xl svg-icon" height="3em" width="3em" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a>
@@ -1420,7 +1429,7 @@ const HTML_CONTENT = `
     <div class="content">
         <!-- 添加/删除控制按钮 -->
         <div class="setting-panel">
-            <button class="round-btn add-card-btn has-tooltip tooltip-left" onclick="showAddDialog()" data-tooltip="添加链接">
+            <button class="round-btn add-card-btn has-tooltip tooltip-left" onclick="showAddDialog()" data-tooltip="添加卡片">
                 <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M16 6H8a2 2 0 0 0-2 2v8M16 42H8a2 2 0 0 1-2-2v-8M32 42h8a2 2 0 0 0 2-2v-8M32 6h8a2 2 0 0 1 2 2v8" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                     <path d="M32 24H16M24 16v16" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
@@ -1434,7 +1443,7 @@ const HTML_CONTENT = `
                 </svg>
             </button>
             
-            <button class="round-btn add-category-btn has-tooltip tooltip-left" onclick="addCategory()" data-tooltip="添加分类">
+            <button class="round-btn add-category-btn has-tooltip tooltip-left" onclick="addCategory()" data-tooltip="新增分类">
                 <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 8c0-1.1.9-2 2-2h12l5 6h17c1.1 0 2 .9 2 2v26c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V8Z" stroke="white" stroke-width="4" stroke-linejoin="round" fill="none"/>
                     <path d="M18 27h12M24 21v12" stroke="white" stroke-width="4" stroke-linecap="round"/>
@@ -1748,7 +1757,7 @@ const HTML_CONTENT = `
 
 		controls.forEach(control => {
 			if (disabled) {
-				control.style.opacity = '0.6';
+				control.style.opacity = '0.3';
 				control.style.cursor = 'not-allowed';
 				control.disabled = true;
 			} else {
@@ -2131,7 +2140,7 @@ const HTML_CONTENT = `
 
             //  用 scrollRatio 来计算目标 viewportCenter（保持和 setActiveCategoryButtonByVisibility 一致）
             const dynamicOffset = scrollRatio* 150;
-            let viewportCenter = fixedHeight + scrollRatio * (window.innerHeight / 2) + dynamicOffset;
+            let viewportCenter = 65 + fixedHeight + scrollRatio * (window.innerHeight / 2) + dynamicOffset;
             viewportCenter = Math.min(viewportCenter, window.innerHeight);
 
             const targetScrollTop = sectionCenterAbs - viewportCenter;
@@ -2243,25 +2252,29 @@ const HTML_CONTENT = `
     // 更新UI状态
     function updateUIState() {
         const adminBtn = document.getElementById('admin-mode-btn');
+        const adminBtnDivider = document.getElementById('admin-mode-btn-divider');
         const secretGardenBtn = document.getElementById('secret-garden-btn');
         const settingPanel = document.querySelector('.setting-panel');
         adminBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
         secretGardenBtn.dataset.state = isLoggedIn ? 'logout' : 'login';
-        secretGardenBtn.textContent = isLoggedIn ? "注销" : "登录";
+        secretGardenBtn.textContent = isLoggedIn ? "退出登录" : "登录";
         secretGardenBtn.style.display = 'inline-block';
         let searchDisabled = false;
     
         if (isAdmin) {
             adminBtn.textContent = "退出编辑";
             adminBtn.style.display = 'inline-block';
+            adminBtnDivider.style.display = 'block';
             settingPanel.style.display = 'flex';
 			searchDisabled = true;
         } else if (isLoggedIn) {
             adminBtn.textContent = "编辑模式";
             adminBtn.style.display = 'inline-block';
+            adminBtnDivider.style.display = 'block';
             settingPanel.style.display = 'none';
         } else {
             adminBtn.style.display = 'none';
+            adminBtnDivider.style.display = 'none';
             settingPanel.style.display = 'none';
         }
         setSearchDisabledState(searchDisabled);
@@ -2947,11 +2960,11 @@ const HTML_CONTENT = `
                         return;
                     }
                 }
-    
                 isAdmin = true;
                 adminBtn.textContent = "退出编辑";
                 settingPanel.style.display = 'flex';
                 await reloadCardsAsAdmin();
+                customAlert('已进入编辑模式，可通过右侧悬浮按钮进行编辑');
                 logAction('进入设置');
             } else if (isAdmin) {
                 isAdmin = false;
@@ -2961,7 +2974,6 @@ const HTML_CONTENT = `
                 await reloadCardsAsAdmin();
                 logAction('离开设置');
             }
-            
             updateUIState();
         } catch (error) {
             logAction('设置模式切换出错', { error: error.message });
@@ -2971,18 +2983,26 @@ const HTML_CONTENT = `
         }
     }     
     
-    // 切换到登录状态
-    function toggleSecretGarden() {
+    // 切换登录状态
+    async function toggleLogin() {
         if (!isLoggedIn) {
             showPasswordDialog();
         } else {
-            isLoggedIn = false;
-            isAdmin = false;
-            localStorage.removeItem('authToken');
-            loadLinks();
-            updateUIState();
-            logAction('退出登录');
+            const confirmed = await customConfirm('确定退出登录吗？', '确定', '取消');
+            if (confirmed) {
+                logout();
+            }
         }
+    }
+
+    function logout() {
+        isLoggedIn = false;
+        isAdmin = false;
+        localStorage.removeItem('authToken');
+        loadLinks();
+        updateUIState();
+        customAlert('已成功退出登录！');
+        logAction('退出登录');
     }
     
     function showPasswordDialog() {
@@ -3015,6 +3035,7 @@ const HTML_CONTENT = `
                     console.log('Token saved:', result.token);
                     dialog.style.display = 'none';
                     loadLinks();
+                    customAlert('登录成功,可进入编辑模式进行设置');
                     logAction('登录成功');
                     updateUIState();
                 } else {
@@ -3022,7 +3043,7 @@ const HTML_CONTENT = `
                     logAction('登录失败', { reason: result.error || '密码错误' });
                 }
             }).catch(error => {
-                console.error('Login error:', error);
+                console.error('Login error');
                 customAlert('登录过程出错，请重试');
             });
         };
@@ -3356,6 +3377,7 @@ const HTML_CONTENT = `
 			confirmBtn.textContent = confirmText;
 			
 			overlay.style.display = 'flex';
+            confirmBtn.focus();
 
 			// 只在弹窗内监听键盘事件
 			const handleKeyDown = (e) => {
@@ -3469,6 +3491,7 @@ const HTML_CONTENT = `
 				cancelBtn.textContent = cancelText;
 
 				overlay.style.display = 'flex';
+                okBtn.focus();
 
 				const handleConfirm = (result) => {
 					cleanup();
