@@ -7,7 +7,6 @@ const HTML_CONTENT = `
     <title>Card Tab</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⭐</text></svg>">
     <style>
-        /* 全局样式 */
         body {
             display: flex;
             flex-direction: column;
@@ -16,6 +15,7 @@ const HTML_CONTENT = `
             padding: 0;
             background-color: #f8f6f2;
             transition: background-color 0.3s ease;
+            overflow-y: scroll;
         }
 
         /* 暗色模式样式 */
@@ -24,7 +24,6 @@ const HTML_CONTENT = `
             color: #e3e3e3;
         }
         
-        /* 固定元素样式 */
         .fixed-elements {
             display: flex;
             flex-direction: column;
@@ -99,27 +98,16 @@ const HTML_CONTENT = `
             width: 100%;
         }
         
-        /* 中心内容样式 */
-        .search-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform: none;
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-        }
-        
-        /* 管理员控制面板样式 */
-        .admin-controls {
+        .profile-content {
             position: relative;
             display: flex;
             align-items: center;
             gap: 1em;
         }
 
-        .admin-btn {
+        .profile-btn {
             display: flex;
+            width: 114px;
             align-items: center;
             gap: 6px;
             background-color: #43b883;
@@ -134,44 +122,53 @@ const HTML_CONTENT = `
             position: relative;
         }
 
-        .admin-btn.padding {
+        .profile-btn.padding {
             padding-right: 10px; 
         }
 
-        .admin-btn.no-pointer {
+        #menu-toggle {
+            white-space: pre;
+        }
+
+        .profile-btn.big-btn {
+            height: 32px;
+            gap: 2px;
+        }
+
+        .profile-btn.no-pointer {
             cursor: default;
         }
 
-        .admin-btn svg {
+        .profile-btn svg {
             width: 23px;
             height: 23px;
             display: block;
         }
 
 
-        body.dark-theme .admin-btn {
+        body.dark-theme .profile-btn {
             background-color: #5d7fb9;
         }
 
-        .admin-a {
+        .profile-a {
             vertical-align: middle;
         }
 
-        .admin-a svg {
-            width: 28px;
-            height: 28px;
+        .profile-a svg {
+            width: 32px;
+            height: 32px;
             fill: #43b883;
         }
 
-        body.dark-theme .admin-a svg {
+        body.dark-theme .profile-a svg {
             fill: #5d7fb9;
         }
 
-        .admin-dropdown-wrapper {
+        .profile-dropdown-wrapper {
             position: relative; /* 用于下拉菜单定位参考 */
         }
 
-        .admin-dropdown {
+        .profile-dropdown {
             position: absolute;
             top: 100%; 
             right: 0;
@@ -185,18 +182,18 @@ const HTML_CONTENT = `
             border-radius: 5px;
         }
 
-        .admin-dropdown.hidden {
+        .profile-dropdown.hidden {
             display: none;
         }
 
-        .admin-dropdown button {
+        .profile-dropdown button {
             display: block;
             width: 100%;
             margin: 0.3em 0;
             text-align: left;
         }
 
-        .admin-dropdown button::before {
+        .profile-dropdown button::before {
             display: inline-block;
             width: 18px;
             height: 18px;
@@ -210,17 +207,17 @@ const HTML_CONTENT = `
         }
 
         /* 登录状态图标 */
-        .admin-dropdown button[data-state="login"]::before {
+        .profile-dropdown button[data-state="login"]::before {
         content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10 17 5-5-5-5'/%3E%3Cpath d='M15 12H3'/%3E%3Cpath d='M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4'/%3E%3C/svg%3E");
         }
 
         /* 退出状态图标 */
-        .admin-dropdown button[data-state="logout"]::before {
+        .profile-dropdown button[data-state="logout"]::before {
         content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 17 5-5-5-5'/%3E%3Cpath d='M21 12H9'/%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3C/svg%3E");
         }
 
         /* 设置状态图标 */
-        .admin-dropdown button[data-state="setting"]::before {
+        .profile-dropdown button[data-state="setting"]::before {
         content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
         }
 
@@ -247,7 +244,7 @@ const HTML_CONTENT = `
             cursor: pointer;
         }
 
-        body.dark-theme .admin-dropdown {
+        body.dark-theme .profile-dropdown {
             background-color: #2d3748;
             border-color: #4a5568;
         }
@@ -370,6 +367,14 @@ const HTML_CONTENT = `
             margin: auto;
         }
 
+        .setting-btn.active {
+            background-color: #d35400;
+        }
+
+        body.dark-theme .setting-btn.active {
+            background-color: #9f7aea;
+        }
+
         body.dark-theme .round-btn {
             background-color: #5d7fb9;
         }
@@ -380,28 +385,25 @@ const HTML_CONTENT = `
             padding: 20px;
         }
         
-        /* 搜索栏样式 */
-        .search-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
         .search-bar {
             display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
+            align-items: stretch;
+            height: 44px; 
             width: 100%;
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e0e0e0;
-            transition: all 0.3s ease;
+            margin: 0 auto 10px auto;
             border-radius: 24px;
             overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e0e0;
+        }
+
+        .search-bar select,
+        .search-bar button,
+        .input-wrapper {
+            height: 100%;
+            display: flex;
+            align-items: center;
         }
 
         .search-bar:focus-within {
@@ -410,22 +412,19 @@ const HTML_CONTENT = `
         }
 
         .search-bar select {
-            border: none;
-            background-color: #f4f7fa;
-            padding: 10px 15px;
-            font-size: 14px;
-            color: #43b883;
             width: 80px;
+            flex: 0 0 80px;
+            font-size: 14px;
+            padding: 0 15px;
+            background-color: #f4f7fa;
+            color: #43b883;
+            border: none;
             outline: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="6" viewBox="0 0 12 6"><path fill="%2343b883" d="M0 0l6 6 6-6z"/></svg>');
             background-repeat: no-repeat;
             background-position: right 10px center;
+            appearance: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 0;
         }
 
         /* 下拉菜单样式 */
@@ -465,7 +464,7 @@ const HTML_CONTENT = `
 			-moz-text-fill-color: #e3e3e3 !important;
 		}
 
-        body.dark-theme .search-bar button {
+        body.dark-theme .search-bar button#search-button {
             background-color: #5d7fb9;
         }
 
@@ -476,13 +475,23 @@ const HTML_CONTENT = `
             overflow: visible;
         }
 
-        .search-bar input {
+        .input-wrapper {
+            position: relative;
             flex: 1;
-            border: none;
-            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            height: 100%;
+            width: 100%;
+            padding: 10px 35px 10px 10px;
             font-size: 14px;
+            border: none;
             background-color: #fff !important;
             outline: none;
+            box-sizing: border-box;
         }
 
 		/* 针对 Chrome 和其他基于 Webkit 的浏览器 */
@@ -498,22 +507,32 @@ const HTML_CONTENT = `
 			-moz-text-fill-color: #000 !important;
 		}
 
-        .search-bar button {
+        #clear-search-button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
             border: none;
+            color: #555;
+            font-size: 14px;
+            display: none; 
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .search-bar button#search-button {
+            flex: 0 0 auto;
+            padding: 10px 14px;
+            border: none;
+            font-size: 16px;
             background-color: #43b883;
             color: white;
-            padding: 10px 15px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
-		#clear-search-button {
-			display: none; 
-			background-color: #fff !important;
-			color: #555;
-		}
-
-        
         /* 分类按钮容器样式 */
         .category-buttons-container {
             display: flex;
@@ -612,14 +631,16 @@ const HTML_CONTENT = `
             background-color: #5d7fb9;
         }
         
-        .edit-category-btn {
-            background-color: #4caf50;
+        .category-btn {
             color: white;
             border: none;
-            padding: 5px 10px;
-            margin-left: 10px;
+            padding: 5px;
+            margin-left: 5px;
             border-radius: 5px;
             cursor: pointer;
+        }
+        .edit-category-btn {
+            background-color: #4caf50;
         }
         
         body.dark-theme .edit-category-btn {
@@ -629,22 +650,11 @@ const HTML_CONTENT = `
 
         .delete-category-btn {
             background-color: #F44336;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            margin-left: 10px;
-            border-radius: 5px;
-            cursor: pointer;
         }
 
         .move-category-btn {
             background-color: #2196f3;
-            color: white;
-            border: none;
             padding: 2px 1px;
-            margin-left: 10px;
-            border-radius: 5px;
-            cursor: pointer;
         }
         .move-category-btn svg {
             width: 24px;
@@ -729,7 +739,7 @@ const HTML_CONTENT = `
         .card-tip {
             font-size: 12px;
             color: #666;
-            display: -webkit-box;          /* 关键属性：启用多行文本截断 */
+            display: -webkit-box;          /* 启用多行文本截断 */
             -webkit-line-clamp: 2;         /* 最多显示两行 */
             -webkit-box-orient: vertical;  /* 垂直方向排列 */
             overflow: hidden;             /* 超出部分隐藏 */
@@ -861,21 +871,21 @@ const HTML_CONTENT = `
                 z-index: auto; 
             }
 
-            .admin-btn svg {
+            .profile-btn svg {
                 width: 32px; 
                 height: 32px;
             }
 
-            .admin-btn.big-btn {
+            .profile-btn.big-btn {
                 height: 40px;
             }
             
-            .admin-btn.padding {
+            .profile-btn.padding {
                 padding: 0 5px;
             }
 
             #menu-toggle,
-            .admin-a {
+            .profile-a {
                 display: none;
             }
 
@@ -965,6 +975,7 @@ const HTML_CONTENT = `
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             transform: translateY(-20px);
             animation: slideUp 0.3s ease forwards;
+            margin: 10px;
         }
         .dialog-title {
             margin: 0 0 15px 0;
@@ -1129,7 +1140,7 @@ const HTML_CONTENT = `
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.6); /* 半透明黑色遮罩 */
+            background-color: rgba(0,0,0,0.6);
             backdrop-filter: blur(4px);
             z-index: 7000;
             display: flex;
@@ -1165,13 +1176,13 @@ const HTML_CONTENT = `
           }
 
         @media (hover: hover) and (pointer: fine) {
-			.admin-btn:hover,
-			.admin-a:hover {
+			.profile-btn:hover,
+			.profile-a:hover {
 				transform: translateY(-2px); 
 			}
 
-            .admin-btn.no-hover:hover,
-			.admin-a.no-hover:hover {
+            .profile-btn.no-hover:hover,
+			.profile-a.no-hover:hover {
 				transform: none !important; 
 			}
             
@@ -1249,8 +1260,6 @@ const HTML_CONTENT = `
             body.dark-theme .has-tooltip:hover::before {
                 border-color: transparent;
             }
-
-            /* 不同方向的样式 */
 
             /* 上方提示框和箭头 */
             .tooltip-top::after {
@@ -1334,6 +1343,62 @@ const HTML_CONTENT = `
             }
         }
 
+        .eye-toggle {
+            --size: 28px; 
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: var(--size);
+            height: var(--size);
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #43b883;
+            margin-left: 5px;
+        }
+
+        body.dark-theme .eye-toggle {
+            background-color: #5d7fb9;
+        }
+
+        .eye-toggle-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        .eye-toggle-icon {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .eye-toggle-icon::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75%;
+            height: 75%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        /* 未选中状态*/
+        .eye-toggle-icon::before {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>');
+        }
+
+        /* 选中状态*/
+        .eye-toggle-input:checked + .eye-toggle-icon::before {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>');
+        }
+
     </style>
     <script>
         (function () {
@@ -1369,22 +1434,19 @@ const HTML_CONTENT = `
                 </div>
                 我的导航
             </a>
-            <!-- 管理员控制面板 -->
-            <div class="admin-controls">
-                <!-- 下拉包裹器（用于相对定位） -->
-                <div class="admin-dropdown-wrapper">
-                    <!-- 主按钮 -->
-                    <button id="admin-menu-toggle" class="admin-btn no-hover padding big-btn">
+            <div class="profile-content">
+                <div class="profile-dropdown-wrapper">
+                    <button id="profile-menu-toggle" class="profile-btn no-hover padding big-btn">
                         <span>
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="2" rx="1" fill="currentColor"/><rect x="3" y="11" width="18" height="2" rx="1" fill="currentColor"/><rect x="3" y="16" width="18" height="2" rx="1" fill="currentColor"/></svg>
                         </span>
-                        <span id="menu-toggle">管理菜单</span>
+                        <span id="menu-toggle"> 个人中心 </span>
                     </button>
 
                     <!-- 下拉菜单 -->
-                    <div id="admin-dropdown" class="admin-dropdown hidden">
-                        <button id="admin-mode-btn" onclick="toggleAdminMode()" class="admin-btn" data-state="setting">编辑模式</button>
-                        <div class="divider" id="admin-mode-btn-divider"></div>
+                    <div id="profile-dropdown" class="profile-dropdown hidden">
+                        <button id="edit-mode-btn" onclick="toggleEditMode()" class="profile-btn" data-state="setting">编辑模式</button>
+                        <div class="divider" id="edit-mode-btn-divider"></div>
                         <div class="preference-toggle">
                             <span>主题切换</span>
                             <label class="switch">
@@ -1400,34 +1462,29 @@ const HTML_CONTENT = `
                             </label>
                         </div>
                         <div class="divider"></div>
-                        <button id="secret-garden-btn" onclick="toggleLogin()" class="admin-btn">登 录</button>
+                        <button id="login-Btn" onclick="toggleLogin()" class="profile-btn">登 录</button>
                     </div>
                 </div>
-                <a target="_blank" class="admin-a has-tooltip tooltip-bottom tooltip-bottom-offset tooltip-bottom-left" id="original-author" data-tooltip="原作者Github,喜欢请给他点⭐" href="https://github.com/hmhm2022/Card-Tab"><svg stroke-width="0" viewBox="0 0 16 16" class="text-xl svg-icon" height="3em" width="3em" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+                <a target="_blank" class="profile-a has-tooltip tooltip-bottom tooltip-bottom-offset tooltip-bottom-left" id="original-author" data-tooltip="原作者Github,喜欢请给他点⭐" href="https://github.com/hmhm2022/Card-Tab"><svg stroke-width="0" viewBox="0 0 16 16" class="text-xl svg-icon" height="3em" width="3em" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a>
             </div>
         </div>
-        <div class="search-content">
-            <!-- 搜索栏 -->
-            <div class="search-container">
-                <div class="search-bar">
-                    <select id="search-engine-select">
-						<option value="site">本站</option>
-                        <option value="baidu">百度</option>
-                        <option value="bing">必应</option>
-                        <option value="google">谷歌</option>
-                    </select>
-                    <input type="text" id="search-input" placeholder="">
-					<button id="clear-search-button" class="has-tooltip tooltip-left" data-tooltip="清除搜索结果">❌</button>
-                    <button id="search-button">🔍</button>
-					
-                </div>
+        <div class="search-bar">
+            <select id="search-engine-select">
+                <option value="site">本站</option>
+                <option value="baidu">百度</option>
+                <option value="bing">必应</option>
+                <option value="google">谷歌</option>
+            </select>
+            <div class="input-wrapper">
+                <input type="text" id="search-input" placeholder="">
+                <button id="clear-search-button" class="has-tooltip tooltip-left" data-tooltip="清除搜索结果">❌</button>
             </div>
+            <button id="search-button">🔍</button> 
         </div>
 		<div id="category-buttons-container" class="category-buttons-container"></div>
         
     </div>
     <div class="content">
-        <!-- 添加/删除控制按钮 -->
         <div class="setting-panel">
             <button class="round-btn add-card-btn has-tooltip tooltip-left" onclick="showAddDialog()" data-tooltip="添加卡片">
                 <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
@@ -1436,7 +1493,7 @@ const HTML_CONTENT = `
                 </svg>
             </button>
             
-            <button class="round-btn edit-card-mode-btn has-tooltip tooltip-left" onclick="toggleEditMode()" data-tooltip="编辑链接">
+            <button class="round-btn edit-card-mode-btn has-tooltip tooltip-left setting-btn" onclick="toggleEditCardMode()" data-tooltip="编辑链接">
                 <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M42 26v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                     <path d="M14 26.72V34h7.32L42 13.31 34.7 6 14 26.72Z" stroke="white" stroke-width="4" stroke-linejoin="round" fill="none"/>
@@ -1450,7 +1507,7 @@ const HTML_CONTENT = `
                 </svg>
             </button>
             
-            <button class="round-btn edit-category-mode-btn has-tooltip tooltip-left" onclick="toggleEditCategory()" data-tooltip="编辑分类">
+            <button class="round-btn edit-category-mode-btn has-tooltip tooltip-left setting-btn" onclick="toggleEditCategory()" data-tooltip="编辑分类">
                 <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 8c0-1.1.9-2 2-2h12l5 6h17c1.1 0 2 .9 2 2v26c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V8Z" stroke="white" stroke-width="4" stroke-linejoin="round" fill="none"/>
                     <circle cx="24" cy="28" r="4" stroke="white" stroke-width="4" fill="none"/>
@@ -1576,11 +1633,12 @@ const HTML_CONTENT = `
     <script>
 
     // 全局变量
-    let isAdmin = false;
+    let isEditMode = false;
     let isLoggedIn = false;
     let editCardMode = false;
     let isEditCategoryMode = false;
     const categories = {};
+    let currentEngine;
 
     // 日志记录函数
     function logAction(action, details) {
@@ -1589,79 +1647,111 @@ const HTML_CONTENT = `
         console.log(logEntry); 
     }
 
+    // 搜索引擎配置
     const searchEngines = {
         baidu: "https://www.baidu.com/s?wd=",
         bing: "https://www.bing.com/search?q=",
         google: "https://www.google.com/search?q="
     };
 
-    let currentEngine;
-    document.addEventListener('DOMContentLoaded', () => {
-        const menuToggleBtn = document.getElementById('admin-menu-toggle');
-        const themeSwitchCheckbox = document.getElementById('theme-switch-checkbox');
-        const dropdown = document.getElementById('admin-dropdown');
-        const savePrefCheckbox = document.getElementById('save-preference-checkbox');
-        const searchSelect = document.getElementById('search-engine-select');
-        const searchButton = document.getElementById('search-button');
-        const searchInput = document.getElementById('search-input');
-        const clearSearchButton = document.getElementById('clear-search-button');
+    document.addEventListener('DOMContentLoaded', async () => {
+        // 初始化UI组件
+        initializeUIComponents();
 
-        themeSwitchCheckbox.checked = window.isDarkTheme;
+        // 检查登录状态并加载链接
+        await checkLoginStatusAndLoad();
+    });
 
-        themeSwitchCheckbox.addEventListener('change', (e) => {
+    async function checkLoginStatusAndLoad() {
+        const isValid = await validateToken();
+
+        if (isValid) {
+            isLoggedIn = true;
+        } else {
+            isLoggedIn = false;
+            isEditMode = false;
+        }
+
+        await loadLinks();
+    }
+
+    // 初始化UI组件
+    function initializeUIComponents() {
+        // 获取DOM元素
+        const elements = {
+            themeSwitchCheckbox: document.getElementById('theme-switch-checkbox'),
+            savePrefCheckbox: document.getElementById('save-preference-checkbox'),
+            searchSelect: document.getElementById('search-engine-select'),
+            searchButton: document.getElementById('search-button'),
+            searchInput: document.getElementById('search-input'),
+            clearSearchButton: document.getElementById('clear-search-button'),
+            menuToggleBtn: document.getElementById('profile-menu-toggle'),
+            dropdown: document.getElementById('profile-dropdown')
+        };
+        
+        // 设置初始状态
+        elements.themeSwitchCheckbox.checked = window.isDarkTheme;
+        
+        // 事件监听器
+        setupEventListeners(elements);
+    }
+
+    // 设置事件监听器
+    function setupEventListeners(elements) {
+        // 主题切换
+        elements.themeSwitchCheckbox.addEventListener('change', (e) => {
             applyTheme(e.target.checked);
         });
 
         // 读取保存偏好设置
         const savedPref = localStorage.getItem('savePreferences') === 'true';
-        savePrefCheckbox.checked = savedPref;
+        elements.savePrefCheckbox.checked = savedPref;
 
         // 初始化搜索引擎
         currentEngine = (savedPref && localStorage.getItem('searchEngine')) || 'site';
         setActiveEngine(currentEngine);
 
+        // 设备类型检测
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        // const isTouchDevice = true;
 
         if (isTouchDevice) {
             // 移动端：点击切换
-            menuToggleBtn.addEventListener('click', () => {
-                dropdown.classList.toggle('hidden');
+            elements.menuToggleBtn.addEventListener('click', () => {
+                elements.dropdown.classList.toggle('hidden');
             });
 
             // 点击外部关闭
             document.addEventListener('click', (e) => {
-                if (!menuToggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.classList.add('hidden');
+                if (!elements.menuToggleBtn.contains(e.target) && !elements.dropdown.contains(e.target)) {
+                    elements.dropdown.classList.add('hidden');
                 }
             });
         } else {
             // 桌面端：鼠标移入显示，移出隐藏
-            menuToggleBtn.addEventListener('mouseenter', () => {
-                dropdown.classList.remove('hidden');
+            elements.menuToggleBtn.addEventListener('mouseenter', () => {
+                elements.dropdown.classList.remove('hidden');
             });
 
-            menuToggleBtn.addEventListener('mouseleave', (e) => {
-                // 设置一个延迟，防止直接跳过 dropdown 区域
+            elements.menuToggleBtn.addEventListener('mouseleave', (e) => {
                 setTimeout(() => {
-                    if (!dropdown.matches(':hover') && !menuToggleBtn.matches(':hover')) {
-                        dropdown.classList.add('hidden');
+                    if (!elements.dropdown.matches(':hover') && !elements.menuToggleBtn.matches(':hover')) {
+                        elements.dropdown.classList.add('hidden');
                     }
                 }, 200);
             });
 
-            dropdown.addEventListener('mouseleave', () => {
-                dropdown.classList.add('hidden');
+            elements.dropdown.addEventListener('mouseleave', () => {
+                elements.dropdown.classList.add('hidden');
             });
 
-            dropdown.addEventListener('mouseenter', () => {
-                dropdown.classList.remove('hidden');
+            elements.dropdown.addEventListener('mouseenter', () => {
+                elements.dropdown.classList.remove('hidden');
             });
         }
 
         // 保存偏好切换
-        savePrefCheckbox.addEventListener('change', () => {
-            const enabled = savePrefCheckbox.checked;
+        elements.savePrefCheckbox.addEventListener('change', () => {
+            const enabled = elements.savePrefCheckbox.checked;
             localStorage.setItem('savePreferences', enabled);
 
             if (!enabled) {
@@ -1672,8 +1762,6 @@ const HTML_CONTENT = `
                 // 启用保存时立即保存当前值
                 localStorage.setItem('searchEngine', currentEngine);
                 localStorage.setItem('theme', window.isDarkTheme ? 'dark' : 'light');
-
-                // 保证select显示正确搜索引擎
                 setActiveEngine(currentEngine);
             }
 
@@ -1681,46 +1769,44 @@ const HTML_CONTENT = `
         });
 
         // 监听搜索引擎下拉选择变化
-        if (searchSelect) {
-            searchSelect.value = currentEngine;
-            searchSelect.addEventListener('change', function () {
+        if (elements.searchSelect) {
+            elements.searchSelect.value = currentEngine;
+            elements.searchSelect.addEventListener('change', function () {
                 setActiveEngine(this.value);
             });
         }
 
         // 搜索按钮点击事件
-        if (searchButton) {
-            searchButton.addEventListener('click', () => {
-                const query = searchInput.value.trim();
-                if (query) {
-                    if (currentEngine === 'site') {
-                        logAction('执行本站搜索', { query });
-                        searchLinks(query); 
-                    } else {
-                        logAction('跳转外部搜索', { engine: currentEngine, query });
-                        window.open(searchEngines[currentEngine] + encodeURIComponent(query), '_blank');
-                    }
+        elements.searchButton.addEventListener('click', async () => {
+            const query = elements.searchInput.value.trim();
+            if (query) {
+                if (currentEngine === 'site') {
+                    logAction('执行本站搜索', { query });
+                    await searchLinks(query); 
+                } else {
+                    logAction('跳转外部搜索', { engine: currentEngine, query });
+                    window.open(searchEngines[currentEngine] + encodeURIComponent(query), '_blank');
                 }
-            });
-        }
+            }
+        });
 
         // 清空搜索按钮
-        if (clearSearchButton) {
-            clearSearchButton.addEventListener('click', () => {
-                searchInput.value = '';
+        if (elements.clearSearchButton) {
+            elements.clearSearchButton.addEventListener('click', () => {
+                elements.searchInput.value = '';
                 loadSections(); 
             });
         }
 
         // 搜索输入框回车事件
-        if (searchInput) {
-            searchInput.addEventListener('keypress', (e) => {
+        if (elements.searchInput) {
+            elements.searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    if (searchButton) searchButton.click();
+                    if (elements.searchButton) elements.searchButton.click();
                 }
             });
         }
-    });
+    }
 
     function updateThemeSwitchUI() {
         const themeSwitchCheckbox = document.getElementById('theme-switch-checkbox');
@@ -1767,41 +1853,144 @@ const HTML_CONTENT = `
 			}
 		});
 	}
+
+    function getAllLinks() {
+        return Object.values(categories)
+            .map(category => category.links || [])
+            .flat();
+    }
+
+	function getPublicLinks() {
+        return Object.values(categories)
+            .flatMap(category => category.links || [])
+            .filter(link => !link.isPrivate);
+    }
+    
+    // 读取链接数据
+    async function loadLinks() {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        
+        // 如果已登录，从 localStorage 获取 token 并添加到请求头
+        if (isLoggedIn) {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                headers['Authorization'] = token; 
+            }
+        }
+        
+        try {
+            const response = await fetch('/api/getLinks?userId=testUser', {
+                headers: headers
+            });
+            
+            if (!response.ok) {
+                throw new Error("HTTP error! status: " + response.status);
+            }
+            
+            
+            const data = await response.json();
+            
+            if (data.categories) {
+                Object.keys(categories).forEach(key => delete categories[key]); // 清空旧数据
+                Object.assign(categories, data.categories); // 加载新数据
+            }
+
+            loadSections();
+            updateCategorySelect();
+            updateUIState();
+            logAction('读取链接', { 
+                isLoggedIn: isLoggedIn,
+                hasToken: !!localStorage.getItem('authToken')
+            });
+        } catch (error) {
+            console.error('Error loading links:', error);
+            await customAlert('加载链接时出错，请刷新页面重试');
+        }
+    }
+
+    async function saveDataToServer(actionName, data) {
+        try {
+            const response = await fetch('/api/saveData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('authToken')
+                },
+                body: JSON.stringify({
+                    userId: 'testUser',
+                    categories: data
+                }),
+            });
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error('Failed to save order');
+            }
+            logAction(actionName + '成功', {
+                categoryCount: Object.keys(data).length,
+                linkCount: getAllLinks().length
+            });
+        } catch (error) {
+            logAction(actionName + '失败', { error: error.message });
+            await customAlert(actionName + '失败，请重试');
+        }
+    }
+
+    // 保存数据
+    async function saveLinks() {
+        if (isEditMode && !(await validateTokenOrRedirect())) {
+            return;
+        }
+		const allLinks = getAllLinks();
+        await saveDataToServer('保存数据', categories);
+    }
     
     // 添加新分类
     async function addCategory() {
-		if (!await validateToken()) {
-            return; 
+        if (!await validateTokenOrRedirect()) {
+            return;
         }
         const categoryName = await showCategoryDialog('请输入新分类名称');
-        if (categoryName && !categories[categoryName]) {
-            categories[categoryName] = [];
-            updateCategorySelect();
-            renderCategories();
-            saveLinks().catch(err => {
-                customAlert('保存失败：' + err.message);
-            });
-            logAction('添加分类', { categoryName, currentLinkCount: getAllLinks().length });
-        } else if (categories[categoryName]) {
-            customAlert('该分类已存在');
+        if (!categoryName) return;
+        if (categories[categoryName]) {
+            await customAlert('该分类已存在');
             logAction('添加分类失败', { categoryName, reason: '分类已存在' });
+            return;
         }
+        // 添加新的分类对象
+        categories[categoryName] = {
+            isHidden: false,
+            links: []
+        };
+        updateCategorySelect();
+        renderCategories();
+        try {
+            await saveLinks();
+        } catch (err) {
+            await customAlert('保存失败：' + err.message);
+        }
+
+        logAction('添加分类', {
+            categoryName,
+            currentLinkCount: getAllLinks().length
+        });
     }
 
     // 编辑分类名称
     async function editCategoryName(oldName) {
-        if (!await validateToken()) return;
+        if (!await validateTokenOrRedirect()) return;
     
         const newName = await showCategoryDialog('请输入新的分类名称', oldName);
         if (!newName || newName === oldName) return;
     
         if (categories[newName]) {
-            customAlert('该名称已存在，请重新命名')
+            await customAlert('该名称已存在，请重新命名')
             return;
         }
     
         categories[newName] = categories[oldName];
-        categories[newName].forEach(item => {
+        categories[newName].links.forEach(item => {
             item.category = newName; 
         });
         delete categories[oldName];
@@ -1809,9 +1998,11 @@ const HTML_CONTENT = `
         renderCategories();
         renderCategoryButtons();
         updateCategorySelect();
-        saveLinks().catch(err => {
-            customAlert('删除失败：' + err.message);
-        });
+        try {
+            await saveLinks(); 
+        } catch (err) {
+            await customAlert('删除失败：' + err.message);
+        }
     
         logAction('编辑分类名称', { oldName, newName });
     }
@@ -1819,7 +2010,7 @@ const HTML_CONTENT = `
 
     // 删除分类
     async function deleteCategory(category) {
-		if (!await validateToken()) {
+		if (!await validateTokenOrRedirect()) {
             return; 
         }
 
@@ -1831,16 +2022,18 @@ const HTML_CONTENT = `
             updateCategorySelect();
             renderCategories();
             renderCategoryButtons();
-            saveLinks().catch(err => {
-                customAlert('删除失败：' + err.message);
-            });
+            try {
+                await saveLinks();
+            } catch (err) {
+                await customAlert('删除失败：' + err.message);
+            }
             logAction('删除分类', { category });
         }
     } 
     
     // 移动分类
     async function moveCategory(categoryName, direction) {
-        if (!await validateToken()) {
+        if (!await validateTokenOrRedirect()) {
             return; 
         }
         const keys = Object.keys(categories);
@@ -1865,132 +2058,150 @@ const HTML_CONTENT = `
         renderCategories();
         renderCategoryButtons();
         updateCategorySelect();
-        saveLinks().catch(err => {
-            customAlert('移动失败：' + err.message);
-        });
+        try {
+            await saveLinks(); 
+        } catch (err) {
+            await customAlert('移动失败：' + err.message);
+        }
     
         logAction('移动分类', { categoryName, direction });
     }
+
+    // 隐藏分类
+    async function toggleCategoryHidden(category, isHidden) {
+        if (!await validateTokenOrRedirect()) {
+            return; 
+        }
+        categories[category].isHidden = isHidden;
+
+        try {
+            await saveLinks();
+            logAction('设置分类隐藏状态', { category, isHidden });
+        } catch (err) {
+            await customAlert('保存隐藏状态失败：' + err.message);
+        }
+    }
     
 	function getFilteredCategoriesByKeyword(query) {
-		const lowerQuery = query.toLowerCase();
-		const result = {};
+        const lowerQuery = query.toLowerCase();
+        const result = {};
 
-		Object.keys(categories).forEach(category => {
-			let privateCount = 0;
-			let linkCount = 0;
+        Object.keys(categories).forEach(category => {
+            const categoryData = categories[category];
 
-			const matchedLinks = categories[category].filter(link => {
-				const nameMatch = link.name && link.name.toLowerCase().includes(lowerQuery);
-				const tipsMatch = link.tips && link.tips.toLowerCase().includes(lowerQuery);
-				const matched = nameMatch || tipsMatch;
+            const matchedLinks = (categoryData.links || []).filter(link => {
+                const nameMatch = link.name && link.name.toLowerCase().includes(lowerQuery);
+                const tipsMatch = link.tips && link.tips.toLowerCase().includes(lowerQuery);
+                return nameMatch || tipsMatch;
+            });
 
-				if (matched) {
-					if (link.isPrivate) privateCount++;
-					linkCount++;
-				}
+            if (matchedLinks.length > 0) {
+                result[category] = {
+                    ...categoryData,
+                    links: matchedLinks
+                };
+            }
+        });
 
-				return matched;
-			});
-
-			if (matchedLinks.length > 0) {
-				result[category] = matchedLinks;
-			}
-		});
-
-		return result;
-	}
+        return result;
+    }
 
     function renderCategorySections({ 
-		filterPrivate = false, 
-		renderButtons = false, 
-		logTag = '渲染分类',
-		searchMode = false,
-		filteredCategories = null 
-	} = {}) {
-		const container = document.getElementById('sections-container');
-		const fragment = document.createDocumentFragment();
+        renderButtons = false, 
+        logTag = '渲染分类',
+        searchMode = false,
+        filteredCategories = null 
+    } = {}) {
+        const container = document.getElementById('sections-container');
+        const fragment = document.createDocumentFragment();
 
-		const sourceCategories = searchMode && filteredCategories 
-			? filteredCategories 
-			: categories;
+        const sourceCategories = searchMode && filteredCategories 
+            ? filteredCategories 
+            : categories;
 
-		Object.keys(sourceCategories).forEach(category => {
-			const section = document.createElement('div');
-			section.className = 'section';
+        Object.entries(sourceCategories).forEach(([category, { links }]) => {
+            const section = document.createElement('div');
+            section.className = 'section';
 
-			const titleContainer = document.createElement('div');
-			titleContainer.className = 'section-title-container';
+            const titleContainer = document.createElement('div');
+            titleContainer.className = 'section-title-container';
 
-			const title = document.createElement('div');
-			title.className = 'section-title';
-			title.textContent = category;
-			titleContainer.appendChild(title);
+            const title = document.createElement('div');
+            title.className = 'section-title';
+            title.textContent = category;
+            titleContainer.appendChild(title);
 
-			if (isAdmin) {
-				const editBtn = document.createElement('button');
-				editBtn.textContent = '编辑名称';
-				editBtn.className = 'edit-category-btn';
-				editBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-				editBtn.onclick = () => editCategoryName(category);
-				titleContainer.appendChild(editBtn);
+            if (isEditMode) {
+                const editBtn = document.createElement('button');
+                editBtn.textContent = '编辑名称';
+                editBtn.className = 'category-btn edit-category-btn';
+                editBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+                editBtn.onclick = () => editCategoryName(category);
+                titleContainer.appendChild(editBtn);
 
-				const deleteBtn = document.createElement('button');
-				deleteBtn.textContent = '删除分类';
-				deleteBtn.className = 'delete-category-btn';
-				deleteBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-				deleteBtn.onclick = () => deleteCategory(category);
-				titleContainer.appendChild(deleteBtn);
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = '删除分类';
+                deleteBtn.className = 'category-btn delete-category-btn';
+                deleteBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+                deleteBtn.onclick = () => deleteCategory(category);
+                titleContainer.appendChild(deleteBtn);
 
-				const upBtn = document.createElement('button');
-				upBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6l-6 6h4v6h4v-6h4z"/></svg>';
-				upBtn.className = 'move-category-btn';
-				upBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-				upBtn.onclick = () => moveCategory(category, -1);
-				titleContainer.appendChild(upBtn);
+                const upBtn = document.createElement('button');
+                upBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6l-6 6h4v6h4v-6h4z"/></svg>';
+                upBtn.className = 'category-btn move-category-btn';
+                upBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+                upBtn.onclick = () => moveCategory(category, -1);
+                titleContainer.appendChild(upBtn);
 
-				const downBtn = document.createElement('button');
-				downBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18l6-6h-4v-6h-4v6h-4z"/></svg>';
-				downBtn.className = 'move-category-btn';
-				downBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-				downBtn.onclick = () => moveCategory(category, 1);
-				titleContainer.appendChild(downBtn);
-			}
+                const downBtn = document.createElement('button');
+                downBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18l6-6h-4v-6h-4v6h-4z"/></svg>';
+                downBtn.className = 'category-btn move-category-btn';
+                downBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+                downBtn.onclick = () => moveCategory(category, 1);
+                titleContainer.appendChild(downBtn);
 
-			const cardContainer = document.createElement('div');
-			cardContainer.className = 'card-container';
-			cardContainer.id = category;
+                const label = document.createElement('label');
+                label.className = 'eye-toggle';
+                label.id = 'hide-category-switch';
+                label.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+                const hideCheckbox = document.createElement('input');
+                hideCheckbox.className = 'eye-toggle-input';
+                hideCheckbox.type = 'checkbox';
+                hideCheckbox.checked = !!categories[category].isHidden;
+                const span = document.createElement('span');
+                span.className = 'eye-toggle-icon';
+                label.appendChild(hideCheckbox);
+                label.appendChild(span);
+                hideCheckbox.onchange = () => toggleCategoryHidden(category, hideCheckbox.checked);
+                titleContainer.appendChild(label);
+            }
 
-			section.appendChild(titleContainer);
-			section.appendChild(cardContainer);
+            const cardContainer = document.createElement('div');
+            cardContainer.className = 'card-container';
+            cardContainer.id = category;
 
-			let linksInCategory = sourceCategories[category];
-			let privateCount = 0;
-			let linkCount = 0;
+            section.appendChild(titleContainer);
+            section.appendChild(cardContainer);
 
-			linksInCategory.forEach(link => {
-				if (link.isPrivate) privateCount++;
-				linkCount++;
-				createCard(link, cardContainer);
-			});
+            links.forEach(link => {
+                createCard(link, cardContainer);
+            });
 
-			if (privateCount < linkCount || isLoggedIn) {
-				fragment.appendChild(section);
-			}
-		});
+            fragment.appendChild(section);
+        });
 
-		container.replaceChildren(...fragment.childNodes);
+        container.replaceChildren(...fragment.childNodes);
 
-		if (renderButtons) {
-			renderCategoryButtons();
-		}
+        if (renderButtons) {
+            renderCategoryButtons();
+        }
 
-		logAction(logTag, {
-			isAdmin,
-			categoryCount: Object.keys(sourceCategories).length,
-			linkCount: Object.values(sourceCategories).flat().length
-		});
-	}
+        logAction(logTag, {
+            isEditMode,
+            categoryCount: Object.keys(sourceCategories).length,
+            linkCount: Object.values(sourceCategories).map(cat => cat.links || []).flat().length
+        });
+    }
 
 	// 渲染分类
 	function renderCategories() {
@@ -2000,12 +2211,12 @@ const HTML_CONTENT = `
 		});
 	} 
 
-	function searchLinks(query) {
+	async function searchLinks(query) {
 		const clearBtn = document.getElementById('clear-search-button');
 		const filteredData = getFilteredCategoriesByKeyword(query);
 
-		if (Object.keys(filteredData).length === 0) {
-			customAlert('没有找到相关站点。');
+		if (Object.keys(filteredData.links).length === 0) {
+			await customAlert('没有找到相关站点。');
 			return;
 		}
 		clearBtn.style.display = 'block';
@@ -2026,7 +2237,7 @@ const HTML_CONTENT = `
 		const displayedCategories = Array.from(sectionTitles).map(title => title.textContent);
 
 		const visibleCategories = displayedCategories.filter(category =>
-			categories[category].some(link => !link.isPrivate || isLoggedIn)
+			(categories[category].links || []).some(link => !link.isPrivate || isLoggedIn)
 		);
 
 		if (visibleCategories.length === 0) {
@@ -2152,146 +2363,52 @@ const HTML_CONTENT = `
     
             logAction('滚动到分类', { category });
         }
-    }
-
-	function getAllLinks() {
-		return Object.values(categories).flat(); 
-	}
-
-	function getPublicLinks() {
-		return Object.values(categories)
-			.flat()
-			.filter(item => !item.isPrivate);
-	}
-    
-    // 读取链接数据
-    async function loadLinks() {
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-        
-        // 如果已登录，从 localStorage 获取 token 并添加到请求头
-        if (isLoggedIn) {
-            const token = localStorage.getItem('authToken');
-            if (token) {
-                headers['Authorization'] = token; 
-            }
-        }
-        
-        try {
-            const response = await fetch('/api/getLinks?userId=testUser', {
-                headers: headers
-            });
-            
-            if (!response.ok) {
-                throw new Error("HTTP error! status: " + response.status);
-            }
-            
-            
-            const data = await response.json();
-            
-            if (data.categories) {
-                Object.assign(categories, data.categories);
-            }
-
-            loadSections();
-            updateCategorySelect();
-            updateUIState();
-            logAction('读取链接', { 
-                isLoggedIn: isLoggedIn,
-                hasToken: !!localStorage.getItem('authToken')
-            });
-        } catch (error) {
-            console.error('Error loading links:', error);
-            alert('加载链接时出错，请刷新页面重试');
-        }
-    }
-
-    async function updateLink(oldLink) {
-        if (!await validateToken()) return;
-    
-        const name = document.getElementById('name-input').value;
-        const url = document.getElementById('url-input').value;
-        const tips = document.getElementById('tips-input').value;
-        const icon = document.getElementById('icon-input').value.trim();
-        const category = document.getElementById('category-select').value;
-        const isPrivate = document.getElementById('private-checkbox').checked;
-    
-        const updatedLink = { name, url, tips, icon, category, isPrivate };
-    
-        disableDialogControl()
-
-        try {
-            for (const [categoryName, linksInCategory] of Object.entries(categories)) {
-				const index = linksInCategory.findIndex(l => l.url === oldLink.url);
-				if (index !== -1) {
-					if (categoryName !== category) {
-						linksInCategory.splice(index, 1);
-						categories[category].push(updatedLink);
-					} else {
-						linksInCategory[index] = updatedLink;
-					}
-					break;
-				}
-			}
-        
-            await saveLinks();
-            renderCategories(); 
-            hideAddDialog();
-        } catch (error) {
-            logAction('更新卡片失败:', error);
-            await customAlert('更新卡片失败:' + error.message);
-        } finally {
-            // 启用所有控件
-            enableDialogControls();
-        }
-        
-    }
-    
+    } 
     
     // 更新UI状态
     function updateUIState() {
-        const adminBtn = document.getElementById('admin-mode-btn');
-        const adminBtnDivider = document.getElementById('admin-mode-btn-divider');
-        const secretGardenBtn = document.getElementById('secret-garden-btn');
+        const editModeBtn = document.getElementById('edit-mode-btn');
+        const editModeBtnDivider = document.getElementById('edit-mode-btn-divider');
+        const loginBtn = document.getElementById('login-Btn');
+        const menuBtn = document.getElementById('menu-toggle');
         const settingPanel = document.querySelector('.setting-panel');
-        adminBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
-        secretGardenBtn.dataset.state = isLoggedIn ? 'logout' : 'login';
-        secretGardenBtn.textContent = isLoggedIn ? "退出登录" : "登录";
-        secretGardenBtn.style.display = 'inline-block';
+        menuBtn.textContent = isLoggedIn ? '欢迎 admin' : ' 个人中心 ';
+        editModeBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
+        loginBtn.dataset.state = isLoggedIn ? 'logout' : 'login';
+        loginBtn.textContent = isLoggedIn ? "退出登录" : "登录";
+        loginBtn.style.display = 'inline-block';
         let searchDisabled = false;
     
-        if (isAdmin) {
-            adminBtn.textContent = "退出编辑";
-            adminBtn.style.display = 'inline-block';
-            adminBtnDivider.style.display = 'block';
+        if (isEditMode) {
+            editModeBtn.textContent = "退出编辑";
+            editModeBtn.style.display = 'inline-block';
+            editModeBtnDivider.style.display = 'block';
             settingPanel.style.display = 'flex';
 			searchDisabled = true;
         } else if (isLoggedIn) {
-            adminBtn.textContent = "编辑模式";
-            adminBtn.style.display = 'inline-block';
-            adminBtnDivider.style.display = 'block';
+            editModeBtn.textContent = "编辑模式";
+            editModeBtn.style.display = 'inline-block';
+            editModeBtnDivider.style.display = 'block';
             settingPanel.style.display = 'none';
         } else {
-            adminBtn.style.display = 'none';
-            adminBtnDivider.style.display = 'none';
+            editModeBtn.style.display = 'none';
+            editModeBtnDivider.style.display = 'none';
             settingPanel.style.display = 'none';
         }
+
+        const cardEditBtn = document.querySelector('.edit-card-mode-btn');
+        const categoryEditBtn = document.querySelector('.edit-category-mode-btn');
+
+        if (cardEditBtn) {
+            cardEditBtn.classList.toggle('active', editCardMode);
+        }
+        if (categoryEditBtn) {
+            categoryEditBtn.classList.toggle('active', isEditCategoryMode);
+        }
+
         setSearchDisabledState(searchDisabled);
         
-        logAction('更新UI状态', { isAdmin, isLoggedIn });
-    }
-    
-    // 登录状态显示（加载所有链接）
-    function showSecretGarden() {
-        if (isLoggedIn) {
-            loadSections();
-            // 显示所有私密标签
-            document.querySelectorAll('.private-tag').forEach(tag => {
-                tag.style.display = 'block';
-            });
-            logAction('显示私密花园');
-        }
+        logAction('更新UI状态', { isEditMode, isLoggedIn });
     }
     
     // 加载分类和链接
@@ -2313,7 +2430,7 @@ const HTML_CONTENT = `
             return false;
         }
     }
-
+ 
     const imgApi = 'https://www.faviconextractor.com/favicon/';
 
     // 从URL中提取域名
@@ -2331,7 +2448,7 @@ const HTML_CONTENT = `
     function createCard(link, container) {
         const card = document.createElement('div');
         card.className = 'card';
-        card.setAttribute('draggable', isAdmin);
+        card.setAttribute('draggable', isEditMode);
         card.dataset.isPrivate = link.isPrivate;
         card.setAttribute('data-url', link.url);
     
@@ -2403,7 +2520,7 @@ const HTML_CONTENT = `
     
         const correctedUrl = link.url.startsWith('http://') || link.url.startsWith('https://') ? link.url : 'http://' + link.url;
     
-        if (!isAdmin) {
+        if (!isEditMode) {
             card.addEventListener('click', () => {
                 window.open(correctedUrl, '_blank');
                 logAction('打开链接', { name: link.name, url: correctedUrl });
@@ -2441,17 +2558,16 @@ const HTML_CONTENT = `
         card.addEventListener('dragover', dragOver);
         card.addEventListener('dragend', dragEnd);
         card.addEventListener('drop', drop);
-        // card.addEventListener('touchstart', touchStart, { passive: false });
 
-        card.addEventListener('mousemove', (e) => handleTooltipMouseMove(e, link.tips, isAdmin));
+        card.addEventListener('mousemove', (e) => handleTooltipMouseMove(e, link.tips, isEditMode));
         card.addEventListener('mouseleave', handleTooltipMouseLeave);
     
-        if (isAdmin && editCardMode) {
+        if (isEditMode && editCardMode) {
             deleteBtn.style.display = 'block';
             editBtn.style.display = 'block';
         }
     
-        if (isAdmin || (link.isPrivate && isLoggedIn) || !link.isPrivate) {
+        if (isEditMode || (link.isPrivate && isLoggedIn) || !link.isPrivate) {
             container.appendChild(card);
         }
         // logAction('创建卡片', { name: link.name, isPrivate: link.isPrivate });
@@ -2474,33 +2590,6 @@ const HTML_CONTENT = `
 
 		logAction('更新分类选择', { categoryCount: Object.keys(categories).length });
 	}
-    
-    // 保存链接数据
-    async function saveLinks() {
-        if (isAdmin && !(await validateToken())) {
-            return;
-        }
-
-		const allLinks = getAllLinks();
-    
-        try {
-            await fetch('/api/saveOrder', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': localStorage.getItem('authToken')
-                },
-                body: JSON.stringify({ 
-                    userId: 'testUser', 
-                    categories: categories
-                }),
-            });
-            logAction('保存链接', { linkCount: allLinks.length, categoryCount: Object.keys(categories).length });
-        } catch (error) {
-            logAction('保存链接失败', { error: error.message });
-            alert('保存链接失败，请重试');
-        }
-    }
 
     function disableDialogControl() {
         const dialog = document.getElementById('dialog-box');
@@ -2532,9 +2621,9 @@ const HTML_CONTENT = `
         }
     }
     
-    // 添加卡片弹窗
-    async function addLink() {
-        if (!await validateToken()) {
+    // 添加卡片
+    async function addCard() {
+        if (!await validateTokenOrRedirect()) {
             return;
         }
 
@@ -2583,16 +2672,19 @@ const HTML_CONTENT = `
         disableDialogControl();
 
         try {
-			categories[category].push(newLink);
+			categories[category].links.push(newLink);
     
             await saveLinks();
         
-            if (isAdmin || (isPrivate && isLoggedIn) || !isPrivate) {
+            if (isEditMode || (isPrivate && isLoggedIn) || !isPrivate) {
                 const container = document.getElementById(category);
                 if (container) {
                     createCard(newLink, container);
                 } else {
-                    categories[category] = [];
+                    categories[category] = {
+                        isHidden: false,
+                        links: []
+                    };
                     renderCategories();
                 }
             }
@@ -2601,7 +2693,7 @@ const HTML_CONTENT = `
             logAction('添加卡片', { name, url, tips, icon, category, isPrivate });
         } catch (error) {
             logAction('添加卡片失败:', error);
-            customAlert('添加卡片失败:' + error)
+            await customAlert('添加卡片失败:' + error)
         } finally {
             // 清空表单
             document.getElementById('name-input').value = '';
@@ -2613,9 +2705,60 @@ const HTML_CONTENT = `
         
     }
 
+    // 更新卡片
+    async function updateCard(oldLink) {
+        if (!await validateTokenOrRedirect()) return;
+
+        const name = document.getElementById('name-input').value;
+        const url = document.getElementById('url-input').value;
+        const tips = document.getElementById('tips-input').value;
+        const icon = document.getElementById('icon-input').value.trim();
+        const category = document.getElementById('category-select').value;
+        const isPrivate = document.getElementById('private-checkbox').checked;
+
+        const updatedLink = { name, url, tips, icon, category, isPrivate };
+
+        disableDialogControl();
+
+        try {
+            for (const [categoryName, categoryObj] of Object.entries(categories)) {
+                const index = categoryObj.links.findIndex(link => link.url === oldLink.url);
+                if (index !== -1) {
+                    // 若移动了分类
+                    if (categoryName !== category) {
+                        categoryObj.links.splice(index, 1);
+
+                        // 若新分类不存在，初始化
+                        if (!categories[category]) {
+                            categories[category] = {
+                                isHidden: false,
+                                links: []
+                            };
+                        }
+
+                        categories[category].links.push(updatedLink);
+                    } else {
+                        // 同分类内更新
+                        categoryObj.links[index] = updatedLink;
+                    }
+                    break;
+                }
+            }
+
+            await saveLinks();
+            renderCategories();
+            hideAddDialog();
+        } catch (error) {
+            logAction('更新卡片失败', error);
+            await customAlert('更新卡片失败: ' + error.message);
+        } finally {
+            enableDialogControls();
+        }
+    }
+
     // 删除卡片
     async function removeCard(card) {
-        if (!await validateToken()) {
+        if (!await validateTokenOrRedirect()) {
             return; 
         }
         const name = card.querySelector('.card-title').textContent;
@@ -2623,17 +2766,20 @@ const HTML_CONTENT = `
         const isPrivate = card.dataset.isPrivate === 'true';
         
         for (const category in categories) {
-			const index = categories[category].findIndex(link => link.url === url);
-			if (index !== -1) {
-				categories[category].splice(index, 1);
-				break;
-			}
-		}
+            const links = categories[category].links || [];
+            const index = links.findIndex(link => link.url === url);
+            if (index !== -1) {
+                categories[category].links.splice(index, 1);
+                break;
+            }
+        }
 
         card.remove(); 
-        saveLinks().catch(err => {
-            customAlert('删除失败：' + err.message);
-        });
+        try {
+            await saveLinks(); 
+        } catch (err) {
+            await customAlert('删除失败：' + err.message);
+        }
 
         logAction('删除卡片', { name, url, isPrivate });
     }
@@ -2644,7 +2790,7 @@ const HTML_CONTENT = `
     
     // 触屏端拖拽卡片
     function touchStart(event) {
-        if (!isAdmin) return;
+        if (!isEditMode) return;
         draggedCard = event.target.closest('.card');
         if (!draggedCard) return;
     
@@ -2685,21 +2831,21 @@ const HTML_CONTENT = `
         }
     }
     
-    function touchEnd(event) {
+    async function touchEnd(event) {
         if (!draggedCard) return;
-    
+
         const card = draggedCard;
-        const targetCategory = card.closest('.card-container').id;
-    
-        validateToken().then(isValid => {
-            if (isValid && card) {
-                updateCardCategory(card, targetCategory);
-                saveCardOrder().catch(error => {
-                    console.error('Save failed:', error);
-                });
+        const targetCategory = card.closest('.card-container')?.id;
+
+        if (card && targetCategory) {
+            updateCardCategory(card, targetCategory);
+            try {
+                await saveCardOrder();
+            } catch (error) {
+                console.error('Save failed:', error);
             }
-            cleanupDragState();
-        });
+        }
+        cleanupDragState();
     }
     
     function findCardUnderTouch(x, y) {
@@ -2712,7 +2858,7 @@ const HTML_CONTENT = `
 
     // PC端拖拽卡片
     function dragStart(event) {
-        if (!isAdmin) {
+        if (!isEditMode) {
             event.preventDefault();
             return;
         }
@@ -2725,7 +2871,7 @@ const HTML_CONTENT = `
     }
     
     function dragOver(event) {
-        if (!isAdmin) {
+        if (!isEditMode) {
             event.preventDefault();
             return;
         }
@@ -2758,27 +2904,29 @@ const HTML_CONTENT = `
         touchStartX = null;
         touchStartY = null;
     }
+
     // PC端拖拽结束
-    function drop(event) {
-        if (!isAdmin) {
+    async function drop(event) {
+        if (!isEditMode) {
             event.preventDefault();
             return;
         }
         event.preventDefault();
-        
+
         const card = draggedCard;
-        const targetCategory = event.target.closest('.card-container').id;
-        
-        validateToken().then(isValid => {
-            if (isValid && card) {
-                updateCardCategory(card, targetCategory);
-                saveCardOrder().catch(error => {
-                    console.error('Save failed:', error);
-                });
+        const targetCategory = event.target.closest('.card-container')?.id;
+
+        if (card && targetCategory) {
+            updateCardCategory(card, targetCategory);
+            try {
+                await saveCardOrder();
+            } catch (error) {
+                console.error('Save failed:', error);
             }
-            cleanupDragState();
-        });
+        }
+        cleanupDragState();
     }
+
 	function dragEnd(event) {
         if (draggedCard) {
             draggedCard.classList.remove('dragging');
@@ -2793,19 +2941,21 @@ const HTML_CONTENT = `
         const isPrivate = card.dataset.isPrivate === 'true';
     
         for (const category in categories) {
-			const index = categories[category].findIndex(link => link.url === cardUrl);
+			const links = categories[category].links || [];
+		    const index = links.findIndex(link => link.url === cardUrl);
 			if (index !== -1) {
-				// 如果新分类不存在则创建
-				if (!categories[newCategory]) {
-					categories[newCategory] = [];
-				}
-				
-				// 移动链接
-				const [link] = categories[category].splice(index, 1);
-				link.category = newCategory;
-				categories[newCategory].push(link);
-				break;
-			}
+                if (!categories[newCategory]) {
+                    categories[newCategory] = {
+                        isHidden: false,
+                        links: []
+                    };
+                }
+
+                const [link] = categories[category].links.splice(index, 1);
+                link.category = newCategory;
+                categories[newCategory].links.push(link);
+                break;
+            }
 		}
     
         card.dataset.category = newCategory;
@@ -2821,81 +2971,59 @@ const HTML_CONTENT = `
     
     // 保存卡片顺序
     async function saveCardOrder() {
-		if (!await validateToken()) {
-			return; 
-		}
-		
-		const containers = document.querySelectorAll('.card-container');
-		const allLinks = getAllLinks();
-		
-		// 清空categories并重新填充
-		const newCategories = {};
-		
-		containers.forEach(container => {
-			const category = container.id;
-			newCategories[category] = [];
-			
-			[...container.children].forEach(card => {
-				if (card.classList.contains('card')) {
-					const url = card.getAttribute('data-url');
-					const tips = card.querySelector('.card-tip').textContent;
-					const name = card.querySelector('.card-title').textContent;
-					const iconElement = card.querySelector('.card-icon');
-					const src = iconElement ? iconElement.getAttribute('src') : '';
-					const icon = src.startsWith(imgApi) ? '' : src;
-					const isPrivate = card.dataset.isPrivate === 'true';
-					
-					// 更新或创建链接对象
-					const existingLink = Object.values(categories).flat().find(
-						link => link.url === url
-					);
-					
-					newCategories[category].push(existingLink || { 
-						name, 
-						url, 
-						tips, 
-						icon, 
-						category, 
-						isPrivate 
-					});
-				}
-			});
-		});
-		
-		// 替换旧categories
-		Object.keys(categories).forEach(key => delete categories[key]);
-		Object.assign(categories, newCategories);
-		
-		logAction('保存卡片顺序', { 
-			categoryCount: Object.keys(newCategories).length,
-			linkCount: allLinks.length
-		});
-		
-		try {
-			const response = await fetch('/api/saveOrder', {
-				method: 'POST',
-				headers: { 
-					'Content-Type': 'application/json',
-					'Authorization': localStorage.getItem('authToken')
-				},
-				body: JSON.stringify({ 
-					userId: 'testUser', 
-					categories: newCategories
-				}),
-			});
-			const result = await response.json();
-			if (!result.success) {
-				throw new Error('Failed to save order');
-			}
-			logAction('保存卡片顺序成功', { 
-				categoryCount: Object.keys(newCategories).length,
-				linkCount: allLinks.length
-			});
-		} catch (error) {
-			logAction('保存顺序失败', { error: error.message });
-			alert('保存顺序失败，请重试');
-		}
-	}             
+        if (!await validateTokenOrRedirect()) {
+            return;
+        }
+
+        const containers = document.querySelectorAll('.card-container');
+        const allLinks = getAllLinks();
+
+        // 清空并重新构造 categories 对象
+        const newCategories = {};
+
+        containers.forEach(container => {
+            const category = container.id;
+
+            // 如果旧分类存在，保留其 isHidden 状态，否则默认 false
+            const oldCategory = categories[category];
+            newCategories[category] = {
+                isHidden: oldCategory ? oldCategory.isHidden : false,
+                links: []
+            };
+
+            [...container.children].forEach(card => {
+                if (card.classList.contains('card')) {
+                    const url = card.getAttribute('data-url');
+                    const tips = card.querySelector('.card-tip')?.textContent || '';
+                    const name = card.querySelector('.card-title')?.textContent || '';
+                    const iconElement = card.querySelector('.card-icon');
+                    const src = iconElement ? iconElement.getAttribute('src') : '';
+                    const icon = src.startsWith(imgApi) ? '' : src;
+                    const isPrivate = card.dataset.isPrivate === 'true';
+
+                    // 从所有链接中查找是否存在此链接，替换旧对象
+                    const existingLink = Object.values(categories)
+                        .flatMap(cat => cat.links || [])
+                        .find(link => link.url === url);
+
+                    newCategories[category].links.push(existingLink || {
+                        name,
+                        url,
+                        tips,
+                        icon,
+                        category,
+                        isPrivate
+                    });
+                }
+            });
+        });
+
+        // 清空旧 categories 并赋值新数据
+        Object.keys(categories).forEach(key => delete categories[key]);
+        Object.assign(categories, newCategories);
+
+        await saveDataToServer('保存卡片顺序', newCategories);
+    }           
     
     // 设置状态重新加载卡片
     async function reloadCardsAsAdmin() {
@@ -2909,84 +3037,86 @@ const HTML_CONTENT = `
 		container.style.transition = 'opacity 0.3s';
 		container.style.opacity = '1';
 
-		logAction('重新加载卡片（管理员模式）');
+		logAction('重新加载卡片（编辑模式）');
 	}
+
+    // 备份用户数据
+    async function backupUserData() {
+        try {
+            const response = await fetch('/api/backupData', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('authToken')
+                },
+                body: JSON.stringify({ 
+                    sourceUserId: 'testUser', 
+                    backupUserId: 'backup' 
+                }),
+            });
+            const result = await response.json();
+            if (result.success) {
+                logAction('数据备份成功');
+                return true;
+            } else {
+                throw new Error('备份失败');
+            }
+        } catch (error) {
+            logAction('数据备份失败', { error: error.message });
+            const confirmed = await customConfirm(
+                '备份失败，是否仍要继续进入编辑模式？', 
+                '是', 
+                '否'
+            );
+            return confirmed;
+        }
+    }
     
     // 切换设置状态
-    async function toggleAdminMode() {
-        const adminBtn = document.getElementById('admin-mode-btn');
+    async function toggleEditMode() {
+        const editModeBtn = document.getElementById('edit-mode-btn');
         const settingPanel = document.querySelector('.setting-panel');
-		const searchInput = document.getElementById('search-input');
-		const searchButton = document.getElementById('search-button');
-		const clearSearchButton = document.getElementById('clear-search-button');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const clearSearchButton = document.getElementById('clear-search-button');
         
         try {
-            showLoading(isAdmin ? '正在退出编辑模式...' : '正在进入编辑模式...');
-            
-            // 无论是进入还是退出设置模式，都先验证token
-            if (!await validateToken()) {
-                logAction('Token验证失败');
+            showLoading(isEditMode ? '正在退出编辑模式...' : '正在进入编辑模式...');
+            if (!await validateTokenOrRedirect()) {
                 return; 
             }
-    
-            if (!isAdmin && isLoggedIn) {
-                // 在进入设置模式之前进行备份
-                try {
-                    const response = await fetch('/api/backupData', {
-                        method: 'POST',
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'Authorization': localStorage.getItem('authToken')
-                        },
-                        body: JSON.stringify({ 
-                            sourceUserId: 'testUser', 
-                            backupUserId: 'backup' 
-                        }),
-                    });
-                    const result = await response.json();
-                    if (result.success) {
-                        logAction('数据备份成功');
-                    } else {
-                        throw new Error('备份失败');
-                    }
-                } catch (error) {
-                    logAction('数据备份失败', { error: error.message });
-                    const confirmed = await customConfirm(
-                        '备份失败，是否仍要继续进入编辑模式？', 
-                        '是', 
-                        '否'
-                    );
-                    if (!confirmed) {
-                        return;
-                    }
-                }
-                isAdmin = true;
-                adminBtn.textContent = "退出编辑";
+
+            if (!isEditMode && isLoggedIn) {
+                const backupConfirmed = await backupUserData();
+                if (!backupConfirmed) return;
+
+                isEditMode = true;
+                editModeBtn.textContent = "退出编辑";
                 settingPanel.style.display = 'flex';
                 await reloadCardsAsAdmin();
-                customAlert('已进入编辑模式，可通过右侧悬浮按钮进行编辑');
-                logAction('进入设置');
-            } else if (isAdmin) {
-                isAdmin = false;
+                await customAlert('已进入编辑模式，可通过右侧悬浮按钮进行编辑');
+                logAction('进入编辑模式');
+            } else if (isEditMode) {
+                isEditMode = false;
                 editCardMode = false;
-                adminBtn.textContent = "编辑模式";
+                isEditCategoryMode = false;
+                editModeBtn.textContent = "编辑模式";
                 settingPanel.style.display = 'none';
                 await reloadCardsAsAdmin();
-                logAction('离开设置');
+                logAction('退出编辑模式');
             }
-            updateUIState();
         } catch (error) {
             logAction('设置模式切换出错', { error: error.message });
         } finally {
             hideLoading();
             document.getElementById('custom-tooltip').style.display = 'none';
         }
-    }     
+    }  
     
     // 切换登录状态
     async function toggleLogin() {
         if (!isLoggedIn) {
-            showPasswordDialog();
+            await showPasswordDialog();
         } else {
             const confirmed = await customConfirm('确定退出登录吗？', '确定', '取消');
             if (confirmed) {
@@ -2996,16 +3126,11 @@ const HTML_CONTENT = `
     }
 
     function logout() {
-        isLoggedIn = false;
-        isAdmin = false;
-        localStorage.removeItem('authToken');
-        loadLinks();
-        updateUIState();
-        customAlert('已成功退出登录！');
+        resetToLoginState('已成功退出登录！');
         logAction('退出登录');
     }
     
-    function showPasswordDialog() {
+    async function showPasswordDialog() {
         const dialog = document.getElementById('password-dialog-overlay');
         const passwordInput = document.getElementById('password-input');
         const cancelBtn = document.getElementById('password-cancel-btn');
@@ -3019,33 +3144,33 @@ const HTML_CONTENT = `
         }, 50);
     
         // 处理登录逻辑
-        const handleLogin = () => {
+        const handleLogin = async () => {
             const password = passwordInput.value.trim();
             if (password === '') {
-                customAlert('请输入密码').then(() => {
+                await customAlert('请输入密码').then(() => {
                     passwordInput.focus();
                 });
                 return;
             }
     
-            login(password).then(result => {
+            try {
+                const result = await login(password); 
                 if (result.valid) {
                     isLoggedIn = true;
                     localStorage.setItem('authToken', result.token);
                     console.log('Token saved:', result.token);
                     dialog.style.display = 'none';
-                    loadLinks();
-                    customAlert('登录成功,可进入编辑模式进行设置');
+                    await loadLinks();
+                    await customAlert('登录成功,可进入编辑模式进行设置');
                     logAction('登录成功');
-                    updateUIState();
                 } else {
-                    customAlert('密码错误');
+                    await customAlert('密码错误');
                     logAction('登录失败', { reason: result.error || '密码错误' });
                 }
-            }).catch(error => {
-                console.error('Login error');
-                customAlert('登录过程出错，请重试');
-            });
+            } catch (error) {
+                console.error('Login error', error);
+                await customAlert('登录过程出错，请重试');
+            }
         };
     
         // 取消按钮点击事件
@@ -3091,36 +3216,35 @@ const HTML_CONTENT = `
         dialog.addEventListener('click', handleOutsideClick);
     }
 
-    let currentConfirmHandler = null;
-    
-    function showEditDialog(link) {
+    // 显示编辑链接对话框
+    async function showEditDialog(link) {
         document.getElementById('dialog-overlay').style.display = 'flex';
-    
+
         document.getElementById('name-input').value = link.name;
         document.getElementById('url-input').value = link.url;
         document.getElementById('tips-input').value = link.tips || '';
-        document.getElementById('icon-input').value = link.icon || '' ;
+        document.getElementById('icon-input').value = link.icon || '';
         document.getElementById('category-select').value = link.category;
         document.getElementById('private-checkbox').checked = link.isPrivate;
-    
+
         const confirmBtn = document.getElementById('dialog-confirm-btn');
         const cancelBtn = document.getElementById('dialog-cancel-btn');
-    
+
         cancelBtn.onclick = hideAddDialog;
-        if (currentConfirmHandler) {
-            confirmBtn.removeEventListener('click', currentConfirmHandler);
-        }
-    
-        currentConfirmHandler = async function () {
-            await updateLink(link);
-        };
-        confirmBtn.addEventListener('click', currentConfirmHandler);
-    
+
+        // 替换 confirm 按钮节点，移除所有旧监听器
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+        newConfirmBtn.addEventListener('click', async () => {
+            await updateCard(link);
+        });
+
         logAction('显示编辑链接对话框');
     }
 
     // 显示添加链接对话框
-    function showAddDialog() {
+    async function showAddDialog() {
         document.getElementById('dialog-overlay').style.display = 'flex';
 
         const nameInput = document.getElementById('name-input');
@@ -3133,34 +3257,33 @@ const HTML_CONTENT = `
         const confirmBtn = document.getElementById('dialog-confirm-btn');
         const cancelBtn = document.getElementById('dialog-cancel-btn');
 
-        // 解绑旧监听器
         cancelBtn.onclick = hideAddDialog;
-        if (currentConfirmHandler) {
-            confirmBtn.removeEventListener('click', currentConfirmHandler);
-        }
 
-        // 绑定新的监听器
-        currentConfirmHandler = async function () {
-            await addLink();
-        };
-        confirmBtn.addEventListener('click', currentConfirmHandler);
+        // 替换 confirm 按钮节点，移除所有旧监听器
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+        newConfirmBtn.addEventListener('click', async () => {
+            await addCard();
+        });
 
         setTimeout(() => {
             nameInput.focus();
         }, 50);
 
-        logAction('显示添加链接对话框');
+        logAction('显示添加卡片对话框');
     }
-
     
-    // 隐藏添加链接对话框
+    // 隐藏添加卡片对话框
     function hideAddDialog() {
         document.getElementById('dialog-overlay').style.display = 'none';
-        logAction('隐藏添加链接对话框');
     }
     
     // 切换编辑卡片模式
-    function toggleEditMode() {
+    async function toggleEditCardMode() {
+        if (!await validateTokenOrRedirect()) {
+            return;
+        }
         editCardMode = !editCardMode;
         const deleteButtons = document.querySelectorAll('.delete-card-btn');
         deleteButtons.forEach(btn => {
@@ -3179,30 +3302,29 @@ const HTML_CONTENT = `
                 card.classList.remove('no-hover'); // 移除禁用 hover 的类
             }
         });
+        updateUIState(); 
         logAction('切换编辑卡片模式', { editCardMode });
     }
     
     //切换编辑删除分类模式
-    function toggleEditCategory() {
+    async function toggleEditCategory() {
+        if (!await validateTokenOrRedirect()) {
+            return;
+        }
         isEditCategoryMode = !isEditCategoryMode;
-    
-        const deleteButtons = document.querySelectorAll('.delete-category-btn');
-        const editButtons = document.querySelectorAll('.edit-category-btn');
-        const moveButtons = document.querySelectorAll('.move-category-btn');
-    
-        deleteButtons.forEach(btn => {
-            btn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+        const selectors = [
+            '.edit-category-btn',
+            '.delete-category-btn',
+            '.move-category-btn',
+            '.eye-toggle'
+        ];
+        
+        document.querySelectorAll(selectors.join(', ')).forEach(el => {
+            el.style.display = isEditCategoryMode ? 'inline-block' : 'none';
         });
     
-        editButtons.forEach(btn => {
-            btn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-        });
-    
-        moveButtons.forEach(btn => {
-            btn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
-        });
-    
-        logAction('切换删除分类模式', { isEditCategoryMode });
+        updateUIState(); 
+        logAction('切换编辑分类模式', { isEditCategoryMode });
     }
     
     
@@ -3212,7 +3334,6 @@ const HTML_CONTENT = `
     function applyTheme(isDark) {
         window.isDarkTheme = isDark;
 
-        // 设置或移除 dark class
         document.body.classList.toggle('dark-theme', isDark);
 
         const themeIcon = document.getElementById('theme-icon');
@@ -3272,7 +3393,7 @@ const HTML_CONTENT = `
         }
     }
     
-    // 验证密码
+    // 登录
     async function login(inputPassword) {
         const response = await fetch('/api/login', {
             method: 'POST',
@@ -3282,79 +3403,54 @@ const HTML_CONTENT = `
         const result = await response.json();
         return result;
     }
-    
-    // 初始化加载
-    document.addEventListener('DOMContentLoaded', async () => {
-        await validateToken(); 
-        loadLinks(); 
-    });
 
+    // 验证失败返回初始状态
+    async function validateTokenOrRedirect() {
+        const valid = await validateToken();
+        if (!valid) {
+            await resetToLoginState('Token验证失败，请重新登录');
+            logAction('Token验证失败');
+            return false;  
+        }
+        return true;
+    }
 
-    // 前端检查是否有 token
+    // 检查token
     async function validateToken() {
         const token = localStorage.getItem('authToken');
         if (!token) {
-            isLoggedIn = false;
-            updateUIState();
             return false;
         }
 
         try {
             const response = await fetch('/api/validateToken', {
-				headers: { 'Authorization': token }
-			});
-            
+                headers: { 'Authorization': token }
+            });
+
             if (response.status === 401) {
                 await resetToLoginState('token已过期，请重新登录'); 
                 return false;
             }
-            
-            isLoggedIn = true;
-            updateUIState();
+
             return true;
         } catch (error) {
-            console.error('Token validation error:');
+            console.error('Token validation error:', error);
             return false;
         }
     }
 
-    // 重置状态
+    // 重置到登录状态
     async function resetToLoginState(message) {
-        await customAlert(message);
-        
         cleanupDragState();
         
         localStorage.removeItem('authToken');
         isLoggedIn = false;
-        isAdmin = false;
+        isEditMode = false;
         editCardMode = false;
         isEditCategoryMode = false;
-        
-        
-        updateUIState();
-        loadSections();
-        
-        const settingPanel = document.querySelector('.setting-panel');
-        if (settingPanel) {
-            settingPanel.style.display = 'none';
-        }
-        
-        const selectors = [
-            '.edit-card-btn',
-            '.delete-card-btn',
-            '.edit-category-btn',
-            '.delete-category-btn',
-            '.move-category-btn'
-        ];
-        
-        document.querySelectorAll(selectors.join(', ')).forEach(btn => {
-            btn.style.display = 'none';
-        });
-        
-        const dialogOverlay = document.getElementById('dialog-overlay');
-        if (dialogOverlay) {
-            dialogOverlay.style.display = 'none';
-        }
+
+        await loadLinks();
+        await customAlert(message);
     }
 
     /**
@@ -3540,10 +3636,10 @@ const HTML_CONTENT = `
         }
 
 
-        function handleTooltipMouseMove(e, tips, isAdmin) {
+        function handleTooltipMouseMove(e, tips, isEditMode) {
             const tooltip = document.getElementById('custom-tooltip');
         
-            if (!tips || isAdmin) {
+            if (!tips || isEditMode) {
                 tooltip.style.display = 'none';
                 return;
             }
@@ -3584,7 +3680,7 @@ const HTML_CONTENT = `
 
 		// 导出数据功能
 		async function exportData() {
-			if (!(await validateToken())) {
+			if (!await validateTokenOrRedirect()) {
 				return;
 			}
 
@@ -3625,7 +3721,7 @@ const HTML_CONTENT = `
 				logAction("数据导出成功");
 			} catch (error) {
 				logAction("数据导出失败", { error: error.message });
-				customConfirm("导出失败，请重试");
+				await customConfirm("导出失败，请重试");
 			} finally {
 				hideLoading();
 			}
@@ -3754,6 +3850,21 @@ async function validateServerToken(authHeader, env) {
 	};
 }
 
+// 老数据转换
+function normalizeCategories(categories) {
+	for (const key in categories) {
+		const value = categories[key];
+		// 如果是旧格式（数组），转换为新格式
+		if (Array.isArray(value)) {
+			categories[key] = {
+				isHidden: false,
+				links: value
+			};
+		}
+	}
+	return categories;
+}
+
 export default {
 	async fetch(request, env) {
 		const url = new URL(request.url);
@@ -3799,6 +3910,7 @@ export default {
 
 			if (data) {
 				const parsedData = JSON.parse(data);
+                const normalizedCategories = normalizeCategories(parsedData.categories || {});
 
 				// 如果提供 token，尝试验证
 				if (authToken) {
@@ -3823,9 +3935,18 @@ export default {
 
 				// 未提供 token，过滤掉私有链接
 				const filteredCategories = {};
-				for (const category in parsedData.categories) {
-					filteredCategories[category] = parsedData.categories[category].filter((link) => !link.isPrivate);
-				}
+                for (const category in normalizedCategories) {
+                    const categoryData = normalizedCategories[category];
+                    if (!categoryData.isHidden) {
+                        const filteredLinks = (categoryData.links || []).filter(link => !link.isPrivate);
+                        if (filteredLinks.length > 0) {
+                        filteredCategories[category] = {
+                            ...categoryData,
+                            links: filteredLinks
+                        };
+                        }
+                    }
+                }
 
 				return new Response(
 					JSON.stringify({
@@ -3853,7 +3974,7 @@ export default {
 			);
 		}
 
-		if (url.pathname === '/api/saveOrder' && request.method === 'POST') {
+		if (url.pathname === '/api/saveData' && request.method === 'POST') {
 			const authToken = request.headers.get('Authorization');
 			const validation = await validateServerToken(authToken, env);
 
@@ -4082,5 +4203,6 @@ export default {
 			success: false,
 			error: 'Source data not found',
 		};
-	},
+	}
+    
 };
