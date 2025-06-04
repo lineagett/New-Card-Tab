@@ -871,6 +871,10 @@ const HTML_CONTENT = `
                 z-index: auto; 
             }
 
+   			.profile-btn {
+                width: 100%;
+            }
+
             .profile-btn svg {
                 width: 32px; 
                 height: 32px;
@@ -2215,10 +2219,13 @@ const HTML_CONTENT = `
 		const clearBtn = document.getElementById('clear-search-button');
 		const filteredData = getFilteredCategoriesByKeyword(query);
 
-		if (Object.keys(filteredData.links).length === 0) {
-			await customAlert('没有找到相关站点。');
-			return;
-		}
+		const hasMatchingLinks = Object.values(filteredData).some(category => category.links.length > 0);
+
+        if (!hasMatchingLinks) {
+            await customAlert('没有找到相关站点。');
+            return;
+        }
+		
 		clearBtn.style.display = 'block';
 		renderCategorySections({
 			renderButtons: true,
