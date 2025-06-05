@@ -46,7 +46,7 @@
 
 </details>
 
-## 预览
+## 界面预览
 
 <details>
 <summary>点击展开</summary>
