@@ -18,7 +18,8 @@
 - 其他一些调整
 
 **登录部分UI**
-![image](https://github.com/user-attachments/assets/30519d9d-739c-4ded-b6ea-41143b81ad7b)
+![image](https://github.com/user-attachments/assets/cddc7d33-43f2-4821-b1c2-4e661c9fd7eb)
+
 **搜索界面**
 ![image](https://github.com/user-attachments/assets/fb8b098e-e616-46cb-902b-715802f7abab)
 **移动端UI**
